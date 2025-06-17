@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="32dp"
+    android:background="@color/background_primary">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Pale Pale Sketch"
+        android:textSize="28sp"
+        android:textColor="@color/text_primary"
+        android:fontFamily="monospace"
+        android:letterSpacing="-0.02"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="48dp"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:lineSpacingMultiplier="1.5"
+        android:text="Vibe and scribble with your friends."
+        android:textColor="@color/text_secondary"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/startDrawingButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start Drawing"
+        android:layout_marginBottom="16dp"
+        android:background="@color/primary"
+        android:textColor="@color/on_primary"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="14sp"
+        android:padding="14dp" />
+
+    <Button
+        android:id="@+id/galleryButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gallery"
+        android:layout_marginBottom="16dp"
+        android:background="@android:color/transparent"
+        android:textColor="@color/primary"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="14sp"
+        android:padding="14dp"
+        style="?android:attr/borderlessButtonStyle" />
+
+    <Button
+        android:id="@+id/profileButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Profile"
+        android:background="@android:color/transparent"
+        android:textColor="@color/primary"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="14sp"
+        android:padding="14dp"
+        style="?android:attr/borderlessButtonStyle" />
+
+</LinearLayout>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base colors -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    
+    <!-- Authentic Claude.ai Design System Colors -->
+    
+    <!-- Call to Action Colors (Claude's Primary) -->
+    <color name="claude_cta_50">#f8ece7</color>
+    <color name="claude_cta_100">#f0d6ca</color>
+    <color name="claude_cta_200">#e8c0ad</color>
+    <color name="claude_cta_300">#d39780</color>
+    <color name="claude_cta_400">#be6e53</color>
+    <color name="claude_cta_500">#b05730</color>
+    <color name="claude_cta_600">#9a4526</color>
+    <color name="claude_cta_700">#7d361c</color>
+    <color name="claude_cta_800">#602612</color>
+    <color name="claude_cta_900">#431708</color>
+    <color name="claude_cta_950">#000000</color>
+    
+    <!-- Hero/Background Colors (Claude's Neutral) -->
+    <color name="claude_hero_50">#f8f7f4</color>
+    <color name="claude_hero_100">#f3f1ed</color>
+    <color name="claude_hero_200">#edebe6</color>
+    <color name="claude_hero_300">#e8e5df</color>
+    <color name="claude_hero_400">#e2dfd8</color>
+    <color name="claude_hero_500">#f0eee5</color>
+    <color name="claude_hero_600">#d6d4cb</color>
+    <color name="claude_hero_700">#bcbab1</color>
+    <color name="claude_hero_800">#a2a097</color>
+    <color name="claude_hero_900">#88867d</color>
+    
+    <!-- Claude Accent Purple -->
+    <color name="claude_accent_purple">#6d5fac</color>
+    <color name="claude_accent_purple_light">#8a7bc8</color>
+    <color name="claude_accent_purple_dark">#4a3d73</color>
+    
+    <!-- Claude Text Colors -->
+    <color name="claude_text_primary">#535146</color>
+    <color name="claude_text_secondary">#6b695d</color>
+    <color name="claude_text_tertiary">#8a8878</color>
+    <color name="claude_text_on_accent">#ffffff</color>
+    
+    <!-- Design System Mappings -->
+    <color name="primary">@color/claude_cta_500</color>
+    <color name="on_primary">@color/white</color>
+    <color name="primary_container">@color/claude_cta_50</color>
+    <color name="on_primary_container">@color/claude_cta_700</color>
+    
+    <color name="secondary">@color/claude_accent_purple</color>
+    <color name="on_secondary">@color/white</color>
+    <color name="secondary_container">@color/claude_hero_100</color>
+    <color name="on_secondary_container">@color/claude_accent_purple_dark</color>
+    
+    <color name="background_primary">@color/claude_hero_500</color>
+    <color name="on_background">@color/claude_text_primary</color>
+    <color name="surface_primary">@color/white</color>
+    <color name="on_surface">@color/claude_text_primary</color>
+    <color name="surface_variant">@color/claude_hero_100</color>
+    <color name="on_surface_variant">@color/claude_text_secondary</color>
+    
+    <!-- Text colors -->
+    <color name="text_primary">@color/claude_text_primary</color>
+    <color name="text_secondary">@color/claude_text_secondary</color>
+    <color name="text_tertiary">@color/claude_text_tertiary</color>
+    
+    <!-- Error states -->
+    <color name="error">#d73027</color>
+    <color name="on_error">#ffffff</color>
+    <color name="error_container">#ffeaea</color>
+    <color name="on_error_container">#410002</color>
+
+    <!-- Dark Mode Colors (Claude.ai Design System) -->
+    <color name="claude_dark_background">#1a1a1a</color>
+    <color name="claude_dark_surface">#2d2d2d</color>
+    <color name="claude_dark_surface_variant">#3a3a3a</color>
+    <color name="claude_dark_text_primary">#f5f5f5</color>
+    <color name="claude_dark_text_secondary">#d0d0d0</color>
+    <color name="claude_dark_text_tertiary">#a0a0a0</color>
+    
+    <!-- Legacy colors (for compatibility) -->
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+</resources>

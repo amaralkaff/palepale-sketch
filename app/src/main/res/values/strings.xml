@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Pale Pale Sketch</string>
+    <string name="welcome_message">Ready to create something amazing?</string>
+    <string name="daily_prompt_title">Today\'s Challenge</string>
+    <string name="sample_prompt_text">Vibe and scribble with your crew.</string>
+    <string name="start_drawing">Start Drawing</string>
+    <string name="community_gallery">Community Gallery</string>
+    <string name="my_profile">My Profile</string>
+    <string name="native_demo">Native Demo (Temporary)</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="storage_permission_message">Storage access is needed to save your drawings</string>
+    <string name="camera_permission_message">Camera access is needed for reference photos</string>
+</resources>
