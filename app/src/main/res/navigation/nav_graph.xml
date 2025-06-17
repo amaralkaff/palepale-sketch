@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <!-- Home/Main Fragment -->
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.drawinggame.ui.fragments.HomeFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_home">
+        
+        <action
+            android:id="@+id/action_home_to_drawing"
+            app:destination="@id/drawingFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+            
+        <action
+            android:id="@+id/action_home_to_gallery"
+            app:destination="@id/galleryFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+            
+        <action
+            android:id="@+id/action_home_to_profile"
+            app:destination="@id/profileFragment" />
+            
+    </fragment>
+
+    <!-- Drawing Fragment -->
+    <fragment
+        android:id="@+id/drawingFragment"
+        android:name="com.example.drawinggame.ui.fragments.DrawingFragment"
+        android:label="@string/create_drawing"
+        tools:layout="@layout/fragment_drawing">
+        
+        <argument
+            android:name="promptId"
+            android:defaultValue="0"
+            app:argType="integer" />
+            
+        <argument
+            android:name="editMode"
+            android:defaultValue="false"
+            app:argType="boolean" />
+            
+        <action
+            android:id="@+id/action_drawing_to_gallery"
+            app:destination="@id/galleryFragment"
+            app:popUpTo="@id/homeFragment" />
+            
+    </fragment>
+
+    <!-- Gallery Fragment -->
+    <fragment
+        android:id="@+id/galleryFragment"
+        android:name="com.example.drawinggame.ui.fragments.GalleryFragment"
+        android:label="@string/community_gallery"
+        tools:layout="@layout/fragment_gallery">
+        
+        <action
+            android:id="@+id/action_gallery_to_detail"
+            app:destination="@id/drawingDetailFragment" />
+            
+        <action
+            android:id="@+id/action_gallery_to_drawing"
+            app:destination="@id/drawingFragment" />
+            
+    </fragment>
+
+    <!-- Drawing Detail Fragment -->
+    <fragment
+        android:id="@+id/drawingDetailFragment"
+        android:name="com.example.drawinggame.ui.fragments.DrawingDetailFragment"
+        android:label="@string/drawing_detail"
+        tools:layout="@layout/fragment_drawing_detail">
+        
+        <argument
+            android:name="drawingId"
+            app:argType="string" />
+            
+    </fragment>
+
+    <!-- Profile Fragment -->
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.drawinggame.ui.fragments.ProfileFragment"
+        android:label="@string/my_profile"
+        tools:layout="@layout/fragment_profile">
+        
+        <action
+            android:id="@+id/action_profile_to_settings"
+            app:destination="@id/settingsFragment" />
+            
+    </fragment>
+
+    <!-- Settings Fragment -->
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.drawinggame.ui.fragments.SettingsFragment"
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_settings" />
+
+    <!-- Prompt Fragment -->
+    <fragment
+        android:id="@+id/promptFragment"
+        android:name="com.example.drawinggame.ui.fragments.PromptFragment"
+        android:label="@string/daily_prompts"
+        tools:layout="@layout/fragment_prompt">
+        
+        <action
+            android:id="@+id/action_prompt_to_drawing"
+            app:destination="@id/drawingFragment" />
+            
+    </fragment>
+
+</navigation>

@@ -1,32 +1,36 @@
 package com.example.drawinggame
 
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.drawinggame.ui.activities.DrawingActivity
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import com.example.drawinggame.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        
-        // Use simple layout for now to test basic functionality
-        setContentView(R.layout.activity_main_simple)
-        
-        // Simple button setup
-        findViewById<Button>(R.id.startDrawingButton).setOnClickListener {
-            val intent = Intent(this, DrawingActivity::class.java)
-            startActivity(intent)
-        }
-        
-        findViewById<Button>(R.id.galleryButton).setOnClickListener {
-            Toast.makeText(this, "Gallery coming soon!", Toast.LENGTH_SHORT).show()
-        }
-        
-        findViewById<Button>(R.id.profileButton).setOnClickListener {
-            Toast.makeText(this, "Profile coming soon!", Toast.LENGTH_SHORT).show()
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
+    
+    // Keep native library loading for gradual migration
+    companion object {
+        init {
+            System.loadLibrary("drawinggame")
         }
     }
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        
+        setupNavigation()
+    }
+    
+    private fun setupNavigation() {
+        // Setup NavController
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
+    }
+    
 }

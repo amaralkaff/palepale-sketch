@@ -15,41 +15,43 @@
         <item name="android:windowBackground">@color/purple_200</item>
     </style>
     
-    <!-- Pale Pale Sketch Theme - Authentic Claude.ai Design System -->
-    <style name="Theme.SocialSketch" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary colors (Claude's CTA terracotta) -->
+    <!-- Social Sketch Theme - Material Design 3 with Claude.ai Colors -->
+    <style name="Theme.SocialSketch" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary colors (Claude's CTA terracotta mapped to MD3) -->
         <item name="colorPrimary">@color/claude_cta_500</item>
-        <item name="colorPrimaryVariant">@color/claude_cta_700</item>
         <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/claude_cta_50</item>
+        <item name="colorOnPrimaryContainer">@color/claude_cta_700</item>
         
-        <!-- Secondary colors (Claude's accent purple) -->
+        <!-- Secondary colors (Claude's accent purple mapped to MD3) -->
         <item name="colorSecondary">@color/claude_accent_purple</item>
-        <item name="colorSecondaryVariant">@color/claude_accent_purple_dark</item>
         <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondaryContainer">@color/claude_hero_100</item>
+        <item name="colorOnSecondaryContainer">@color/claude_accent_purple_dark</item>
+        
+        <!-- Tertiary colors -->
+        <item name="colorTertiary">@color/claude_cta_400</item>
+        <item name="colorOnTertiary">@color/white</item>
+        <item name="colorTertiaryContainer">@color/claude_cta_100</item>
+        <item name="colorOnTertiaryContainer">@color/claude_cta_800</item>
         
         <!-- Background and surfaces (Claude's warm neutrals) -->
-        <item name="android:windowBackground">@color/claude_hero_500</item>
         <item name="android:colorBackground">@color/claude_hero_500</item>
         <item name="colorOnBackground">@color/claude_text_primary</item>
         <item name="colorSurface">@color/white</item>
         <item name="colorOnSurface">@color/claude_text_primary</item>
-        
-        <!-- Status bar -->
-        <item name="android:statusBarColor">@color/claude_hero_500</item>
-        <item name="android:windowLightStatusBar">true</item>
-        
-        <!-- Navigation bar -->
-        <item name="android:navigationBarColor">@color/claude_hero_500</item>
-        <item name="android:windowLightNavigationBar">true</item>
-        
-        <!-- Text colors -->
-        <item name="android:textColorPrimary">@color/claude_text_primary</item>
-        <item name="android:textColorSecondary">@color/claude_text_secondary</item>
-        <item name="android:textColorTertiary">@color/claude_text_tertiary</item>
+        <item name="colorSurfaceVariant">@color/claude_hero_100</item>
+        <item name="colorOnSurfaceVariant">@color/claude_text_secondary</item>
         
         <!-- Error colors -->
         <item name="colorError">@color/error</item>
         <item name="colorOnError">@color/on_error</item>
+        <item name="colorErrorContainer">@color/error_container</item>
+        <item name="colorOnErrorContainer">@color/on_error_container</item>
+        
+        <!-- Status bar -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
     
     <!-- Drawing activity theme -->

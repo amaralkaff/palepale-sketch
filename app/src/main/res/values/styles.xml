@@ -132,6 +132,55 @@
     <style name="TextAppearance.Claude.Body" parent="TextAppearance.Claude.Body.Large" />
     <style name="TextAppearance.Claude.Label" parent="TextAppearance.Claude.Label.Large" />
     
+    <!-- Social Sketch Component Styles -->
+    <style name="Widget.SocialSketch.Button" parent="Widget.Material3.Button">
+        <item name="cornerRadius">12dp</item>
+        <item name="android:textColor">@color/on_primary</item>
+        <item name="backgroundTint">@color/primary</item>
+    </style>
+    
+    <style name="Widget.SocialSketch.Button.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="cornerRadius">12dp</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="strokeColor">@color/primary</item>
+    </style>
+    
+    <style name="Widget.SocialSketch.Button.Text" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textColor">@color/primary</item>
+    </style>
+    
+    <!-- Card Styles -->
+    <style name="Widget.SocialSketch.Card" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">4dp</item>
+    </style>
+    
+    <!-- Toolbar Styles -->
+    <style name="Widget.SocialSketch.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="titleTextColor">?attr/colorOnSurface</item>
+        <item name="navigationIconTint">?attr/colorOnSurface</item>
+    </style>
+    
+    <!-- Floating Action Button -->
+    <style name="Widget.SocialSketch.FloatingActionButton" parent="Widget.Material3.FloatingActionButton.Primary">
+        <item name="tint">?attr/colorOnPrimary</item>
+        <item name="backgroundTint">?attr/colorPrimary</item>
+    </style>
+    
+    <!-- Drawing Tool Button -->
+    <style name="Widget.SocialSketch.DrawingToolButton" parent="Widget.Material3.Button.TextButton">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="iconPadding">0dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconTint">?attr/colorOnSurface</item>
+    </style>
+    
     <!-- Legacy aliases for backward compatibility -->
     <style name="Widget.PalePale.Button" parent="Widget.Claude.Button" />
     <style name="Widget.PalePale.Button.Outlined" parent="Widget.Claude.Button.Outlined" />

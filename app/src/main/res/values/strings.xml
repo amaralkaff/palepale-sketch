@@ -10,4 +10,10 @@
     <string name="permission_required">Permission Required</string>
     <string name="storage_permission_message">Storage access is needed to save your drawings</string>
     <string name="camera_permission_message">Camera access is needed for reference photos</string>
+    
+    <!-- Navigation Labels -->
+    <string name="create_drawing">Create Drawing</string>
+    <string name="drawing_detail">Drawing Detail</string>
+    <string name="daily_prompts">Daily Prompts</string>
+    <string name="settings">Settings</string>
 </resources>

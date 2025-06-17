@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/claude_hero_500"
+    tools:context=".ui.fragments.HomeFragment">
+
+    <!-- App Logo -->
+    <ImageView
+        android:id="@+id/appIcon"
+        android:layout_width="140dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="120dp"
+        android:scaleType="centerInside"
+        android:scaleX="2"
+        android:scaleY="2"
+        android:src="@drawable/logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- App Title -->
+    <TextView
+        android:id="@+id/appTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="PalePale Sketch"
+        android:textAppearance="@style/TextAppearance.Claude.Headline.Large"
+        android:textColor="@color/claude_text_primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appIcon" />
+
+    <!-- Subtitle -->
+    <TextView
+        android:id="@+id/appSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Vibe and scribble with your friends"
+        android:textAppearance="@style/TextAppearance.Claude.Body.Medium"
+        android:textColor="@color/claude_text_secondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appTitle" />
+
+    <!-- Main Navigation Buttons -->
+    <LinearLayout
+        android:id="@+id/mainButtons"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="80dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/appSubtitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/startDrawingButton"
+            style="@style/Widget.SocialSketch.Button"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/start_drawing"
+            android:textSize="16sp"
+            app:cornerRadius="28dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/galleryButton"
+            style="@style/Widget.SocialSketch.Button.Outlined"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/community_gallery"
+            android:textSize="16sp"
+            app:cornerRadius="28dp" />
+
+    </LinearLayout>
+
+    <!-- Secondary Actions -->
+    <LinearLayout
+        android:id="@+id/secondaryActions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="60dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Profile Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/profileButton"
+            style="@style/Widget.SocialSketch.Button.Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:text="Profile"
+            android:textSize="14sp"
+            android:textColor="@color/claude_text_secondary" />
+
+        <!-- Native Demo Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/nativeDemoButton"
+            style="@style/Widget.SocialSketch.Button.Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Native Demo"
+            android:textSize="14sp"
+            android:textColor="@color/claude_text_secondary" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

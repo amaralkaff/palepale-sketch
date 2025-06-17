@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?android:attr/colorBackground"
+    tools:context=".ui.fragments.PromptFragment">
+
+    <!-- Placeholder for Phase 9 Prompt Implementation -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Daily Prompts\n(Phase 9 Implementation)"
+        android:textAppearance="@style/TextAppearance.Claude.Headline.Medium"
+        android:textColor="?attr/colorPrimary"
+        android:gravity="center"
+        android:alpha="0.7" />
+
+</LinearLayout>

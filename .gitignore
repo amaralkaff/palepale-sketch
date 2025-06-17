@@ -17,3 +17,5 @@ local.properties
 # Claude Code and spec folders
 .claude/
 spec/
+
+CLAUDE.md

@@ -15,41 +15,43 @@
         <item name="android:windowBackground">@color/purple_200</item>
     </style>
     
-    <!-- Social Sketch Dark Theme - Claude.ai Design System -->
-    <style name="Theme.SocialSketch" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <!-- Social Sketch Dark Theme - Material Design 3 with Claude.ai Colors -->
+    <style name="Theme.SocialSketch" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary colors (Claude's CTA terracotta - adjusted for dark mode) -->
         <item name="colorPrimary">@color/claude_cta_400</item>
-        <item name="colorPrimaryVariant">@color/claude_cta_600</item>
         <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/claude_cta_700</item>
+        <item name="colorOnPrimaryContainer">@color/claude_cta_100</item>
         
         <!-- Secondary colors (Claude's accent purple - brighter for dark mode) -->
         <item name="colorSecondary">@color/claude_accent_purple_light</item>
-        <item name="colorSecondaryVariant">@color/claude_accent_purple</item>
         <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondaryContainer">@color/claude_accent_purple_dark</item>
+        <item name="colorOnSecondaryContainer">@color/claude_accent_purple_light</item>
+        
+        <!-- Tertiary colors -->
+        <item name="colorTertiary">@color/claude_cta_300</item>
+        <item name="colorOnTertiary">@color/claude_cta_800</item>
+        <item name="colorTertiaryContainer">@color/claude_cta_800</item>
+        <item name="colorOnTertiaryContainer">@color/claude_cta_200</item>
         
         <!-- Background and surfaces (dark Claude neutrals) -->
-        <item name="android:windowBackground">@color/claude_dark_background</item>
         <item name="android:colorBackground">@color/claude_dark_background</item>
         <item name="colorOnBackground">@color/claude_dark_text_primary</item>
         <item name="colorSurface">@color/claude_dark_surface</item>
         <item name="colorOnSurface">@color/claude_dark_text_primary</item>
-        
-        <!-- Status bar -->
-        <item name="android:statusBarColor">@color/claude_dark_background</item>
-        <item name="android:windowLightStatusBar">false</item>
-        
-        <!-- Navigation bar -->
-        <item name="android:navigationBarColor">@color/claude_dark_background</item>
-        <item name="android:windowLightNavigationBar">false</item>
-        
-        <!-- Text colors -->
-        <item name="android:textColorPrimary">@color/claude_dark_text_primary</item>
-        <item name="android:textColorSecondary">@color/claude_dark_text_secondary</item>
-        <item name="android:textColorTertiary">@color/claude_dark_text_tertiary</item>
+        <item name="colorSurfaceVariant">@color/claude_dark_surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/claude_dark_text_secondary</item>
         
         <!-- Error colors -->
         <item name="colorError">@color/error</item>
         <item name="colorOnError">@color/on_error</item>
+        <item name="colorErrorContainer">@color/error_container</item>
+        <item name="colorOnErrorContainer">@color/on_error_container</item>
+        
+        <!-- Status bar -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
     
     <!-- Drawing activity theme -->
