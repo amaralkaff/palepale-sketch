@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    
+    <item
+        android:id="@+id/action_save"
+        android:title="Save"
+        android:icon="@drawable/ic_action_save"
+        app:showAsAction="ifRoom"
+        android:contentDescription="Save drawing" />
+    
+    <item
+        android:id="@+id/action_share"
+        android:title="Share"
+        android:icon="@drawable/ic_social_share"
+        app:showAsAction="ifRoom"
+        android:contentDescription="Share drawing" />
+    
+</menu>

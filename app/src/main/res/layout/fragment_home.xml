@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/claude_hero_500"
+    android:fitsSystemWindows="true"
     tools:context=".ui.fragments.HomeFragment">
 
     <!-- App Logo -->
@@ -41,9 +42,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Vibe and scribble with your friends"
+        android:text="@string/onboarding_welcome_message"
         android:textAppearance="@style/TextAppearance.Claude.Body.Medium"
         android:textColor="@color/claude_text_secondary"
+        android:gravity="center"
+        android:maxLines="2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appTitle" />
@@ -69,7 +72,9 @@
             android:layout_marginBottom="16dp"
             android:text="@string/start_drawing"
             android:textSize="16sp"
-            app:cornerRadius="28dp" />
+            app:cornerRadius="28dp"
+            app:icon="@drawable/ic_drawing_brush"
+            app:iconGravity="start" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/galleryButton"
@@ -79,7 +84,9 @@
             android:layout_marginBottom="16dp"
             android:text="@string/community_gallery"
             android:textSize="16sp"
-            app:cornerRadius="28dp" />
+            app:cornerRadius="28dp"
+            app:icon="@drawable/ic_navigation_gallery"
+            app:iconGravity="start" />
 
     </LinearLayout>
 
@@ -104,7 +111,10 @@
             android:layout_marginEnd="24dp"
             android:text="Profile"
             android:textSize="14sp"
-            android:textColor="@color/claude_text_secondary" />
+            android:textColor="@color/claude_text_secondary"
+            app:icon="@drawable/ic_profile_person"
+            app:iconGravity="start"
+            app:iconTint="@color/claude_text_secondary" />
 
         <!-- Native Demo Button -->
         <com.google.android.material.button.MaterialButton

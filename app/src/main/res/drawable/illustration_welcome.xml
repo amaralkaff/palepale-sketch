@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    
+    <!-- Artist palette -->
+    <path
+        android:fillColor="?attr/colorPrimary"
+        android:pathData="M60,20 C75,20 85,35 85,50 C85,65 75,80 60,80 L50,70 C45,65 45,55 50,50 C55,45 65,45 70,50 Z" />
+    
+    <!-- Brush -->
+    <path
+        android:fillColor="?attr/colorSecondary"
+        android:pathData="M30,40 L35,45 L70,80 L65,85 Z"
+        android:strokeColor="?attr/colorOnSecondary"
+        android:strokeWidth="2" />
+    
+    <!-- Paint stroke -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="?attr/colorTertiary"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:pathData="M40,60 Q50,50 60,55 Q70,60 75,50" />
+</vector>

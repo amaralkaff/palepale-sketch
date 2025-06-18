@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <!-- Daily Drawing Prompts -->
+    <string-array name="daily_prompts">
+        <item>A robot gardening in a magical forest</item>
+        <item>Your favorite food as a superhero</item>
+        <item>A cozy reading nook in a treehouse</item>
+        <item>Animals having a tea party</item>
+        <item>A steampunk-inspired flying machine</item>
+        <item>Underwater city with mermaids</item>
+        <item>A dragon librarian organizing books</item>
+        <item>Your dream vacation destination</item>
+        <item>A wizard\'s potion laboratory</item>
+        <item>Futuristic transportation device</item>
+        <item>A magical pet you\'d love to have</item>
+        <item>Time-traveling adventure scene</item>
+        <item>A house made of your favorite dessert</item>
+        <item>Aliens visiting Earth for the first time</item>
+        <item>A secret door hidden in your room</item>
+        <item>Mythical creatures playing sports</item>
+        <item>Your childhood imaginary friend</item>
+        <item>A village built inside a giant tree</item>
+        <item>Dinosaurs in modern times</item>
+        <item>A floating island in the sky</item>
+        <item>Pirates searching for digital treasure</item>
+        <item>A superhero origin story scene</item>
+        <item>Animals as professional workers</item>
+        <item>Your bedroom transformed into space</item>
+        <item>A magical art supply store</item>
+        <item>Robots learning human emotions</item>
+        <item>A festival celebrating colors</item>
+        <item>Your spirit animal as a warrior</item>
+        <item>A clock tower that controls time</item>
+        <item>Tiny people living in your garden</item>
+    </string-array>
+    
+    <!-- Prompt Categories -->
+    <string-array name="prompt_categories">
+        <item>Fantasy</item>
+        <item>Animals</item>
+        <item>Sci-Fi</item>
+        <item>Adventure</item>
+        <item>Magical</item>
+        <item>Everyday Life</item>
+        <item>Nature</item>
+        <item>Characters</item>
+        <item>Places</item>
+        <item>Objects</item>
+    </string-array>
+    
+    <!-- Prompt Difficulties -->
+    <string-array name="prompt_difficulties">
+        <item>Beginner</item>
+        <item>Intermediate</item>
+        <item>Advanced</item>
+        <item>Expert</item>
+    </string-array>
+    
+</resources>

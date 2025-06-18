@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <!-- Sample Drawing Titles -->
+    <string-array name="sample_drawing_titles">
+        <item>Midnight Garden Dreams</item>
+        <item>Robot Chef\'s Kitchen</item>
+        <item>Ocean\'s Secret Library</item>
+        <item>Flying Cat Adventure</item>
+        <item>Starlight Dragon</item>
+        <item>Magic Potion Workshop</item>
+        <item>Cosmic Tea Party</item>
+        <item>Woodland Fairy House</item>
+        <item>Steampunk Butterfly</item>
+        <item>Crystal Cave Sanctuary</item>
+        <item>Time Traveler\'s Journal</item>
+        <item>Digital Dreamscape</item>
+        <item>Phoenix Rising at Dawn</item>
+        <item>Alien Flower Market</item>
+        <item>Vintage Space Explorer</item>
+        <item>Enchanted Music Box</item>
+        <item>Neon City Nights</item>
+        <item>Mystical Tree Portal</item>
+        <item>Underwater Ballet</item>
+        <item>Clockwork Heart</item>
+    </string-array>
+    
+    <!-- Sample Drawing Descriptions -->
+    <string-array name="sample_drawing_descriptions">
+        <item>Inspired by today\'s prompt about magical gardens. Love how the colors turned out!</item>
+        <item>Had so much fun with this robot character. The kitchen details took forever but worth it!</item>
+        <item>Combining my love for books and ocean themes. Each book tells an underwater story.</item>
+        <item>This little flying cat brings me so much joy. Sometimes simple ideas are the best!</item>
+        <item>Experimenting with galaxy textures and star effects. Digital art is amazing!</item>
+        <item>Based on my dream about a wizard\'s workshop. Every bottle has a different magic spell.</item>
+        <item>What if aliens had tea parties in space? This was the delightful result!</item>
+        <item>Tiny architecture for tiny forest dwellers. The mushroom roof was my favorite part.</item>
+        <item>Mixing Victorian aesthetics with fantasy creatures. Steampunk butterflies need more love!</item>
+        <item>A peaceful sanctuary where crystals sing in harmony. Very meditative to create.</item>
+        <item>Pages from an interdimensional explorer\'s notebook. Each page shows a different era.</item>
+        <item>Playing with abstract digital brushes and neon color palettes tonight.</item>
+        <item>The moment of rebirth and new beginnings. Phoenix symbolism speaks to my soul.</item>
+        <item>Imagining what alien botanists might sell at their intergalactic markets.</item>
+        <item>Retro-futurism meets space exploration. Love the vintage aesthetic with sci-fi elements.</item>
+        <item>A music box that plays melodies from forgotten fairy tales. Pure nostalgia!</item>
+        <item>Cyberpunk cityscape with a focus on atmospheric lighting and mood.</item>
+        <item>Ancient tree that serves as a gateway between magical realms.</item>
+        <item>Graceful underwater dance captured in flowing digital brushstrokes.</item>
+        <item>Mechanical heart powered by gears of love and kindness. Whimsical steampunk vibes!</item>
+    </string-array>
+    
+</resources>

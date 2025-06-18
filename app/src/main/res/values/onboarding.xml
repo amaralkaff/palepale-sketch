@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <!-- Welcome Messages -->
+    <string name="onboarding_welcome_title">Welcome to PalePale Sketch!</string>
+    <string name="onboarding_welcome_message">Vibe and scribble with your friends</string>
+    
+    <string name="onboarding_prompts_title">Daily Creative Challenges</string>
+    <string name="onboarding_prompts_message">Discover fresh inspiration every day with our curated drawing prompts. From whimsical creatures to futuristic landscapes, there\'s always something exciting to create!</string>
+    
+    <string name="onboarding_community_title">Share and Connect</string>
+    <string name="onboarding_community_message">Share your artwork with fellow artists, discover amazing creations, and build connections through the universal language of art.</string>
+    
+    <string name="onboarding_tools_title">Simple Yet Powerful Tools</string>
+    <string name="onboarding_tools_message">Our intuitive drawing tools make it easy to bring your ideas to life. Focus on creativity while we handle the technical details!</string>
+    
+    <!-- Tutorial Content -->
+    <string name="tutorial_drawing_basics_title">Drawing Basics</string>
+    <string name="tutorial_drawing_basics_content">• Tap and hold to see brush preview\n• Pinch to zoom in and out\n• Two-finger tap to undo\n• Three-finger tap to redo\n• Long press tools for options</string>
+    
+    <string name="tutorial_social_features_title">Community Features</string>
+    <string name="tutorial_social_features_content">• Heart drawings you love\n• Comment with encouragement\n• Share your favorites\n• Follow inspiring artists\n• Join daily challenges</string>
+    
+    <!-- Tips and Tricks -->
+    <string-array name="drawing_tips">
+        <item>Start with light sketches and build up details gradually</item>
+        <item>Don\'t worry about perfection - embrace happy accidents!</item>
+        <item>Use the grid feature to help with proportions</item>
+        <item>Try different brush sizes for varied line weights</item>
+        <item>Save your work frequently while drawing</item>
+        <item>Experiment with color blending techniques</item>
+        <item>Take breaks to see your art with fresh eyes</item>
+        <item>Study other artists\' techniques for inspiration</item>
+        <item>Practice basic shapes to improve your foundation</item>
+        <item>Use layers to separate different elements</item>
+    </string-array>
+    
+</resources>

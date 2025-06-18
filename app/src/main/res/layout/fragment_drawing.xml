@@ -7,16 +7,114 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="?android:attr/colorBackground"
+    android:fitsSystemWindows="true"
     tools:context=".ui.fragments.DrawingFragment">
 
-    <!-- Placeholder for Phase 4 Drawing Implementation -->
-    <TextView
+    <!-- Top Toolbar with Safe Area -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/drawingToolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Drawing Canvas\n(Phase 4 Implementation)"
-        android:textAppearance="@style/TextAppearance.Claude.Headline.Medium"
-        android:textColor="?attr/colorPrimary"
-        android:gravity="center"
-        android:alpha="0.7" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="?attr/colorSurface"
+        android:elevation="4dp"
+        app:title="Drawing"
+        app:titleTextColor="?attr/colorOnSurface"
+        app:menu="@menu/drawing_toolbar_menu"
+        app:navigationIcon="@drawable/ic_action_save"
+        app:navigationContentDescription="Save drawing" />
+
+    <!-- Drawing Tools Panel -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardElevation="2dp"
+        app:cardCornerRadius="12dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="12dp"
+            android:gravity="center_vertical">
+
+            <!-- Drawing Tools -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/brushButton"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                app:icon="@drawable/ic_drawing_brush"
+                app:iconTint="?attr/colorPrimary"
+                android:contentDescription="Brush tool" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/penButton"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                app:icon="@drawable/ic_drawing_pen"
+                app:iconTint="?attr/colorOnSurfaceVariant"
+                android:contentDescription="Pen tool" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/eraserButton"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="16dp"
+                app:icon="@drawable/ic_drawing_eraser"
+                app:iconTint="?attr/colorOnSurfaceVariant"
+                android:contentDescription="Eraser tool" />
+
+            <!-- Actions -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/undoButton"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                app:icon="@drawable/ic_action_undo"
+                app:iconTint="?attr/colorOnSurfaceVariant"
+                android:contentDescription="Undo" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/redoButton"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:icon="@drawable/ic_action_redo"
+                app:iconTint="?attr/colorOnSurfaceVariant"
+                android:contentDescription="Redo" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Drawing Canvas Area -->
+    <FrameLayout
+        android:id="@+id/canvasContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="8dp"
+        android:background="@drawable/canvas_paper_texture">
+
+        <!-- Placeholder for Phase 4 Drawing Implementation -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Drawing Canvas\n(Phase 4 Implementation)\n\nProfessional icons now integrated!"
+            android:textAppearance="@style/TextAppearance.Claude.Body.Large"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:gravity="center"
+            android:alpha="0.7" />
+
+    </FrameLayout>
 
 </LinearLayout>

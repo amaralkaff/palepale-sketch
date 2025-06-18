@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp"
+    android:height="96dp"
+    android:viewportWidth="96"
+    android:viewportHeight="96">
+    
+    <!-- Empty canvas -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="?attr/colorOutlineVariant"
+        android:strokeWidth="2"
+        android:pathData="M20,20 L76,20 L76,60 L20,60 Z" />
+    
+    <!-- Dashed lines suggesting emptiness -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="?attr/colorOutlineVariant"
+        android:strokeWidth="1"
+        android:strokeLineCap="round"
+        android:pathData="M30,35 L66,35 M30,45 L50,45" />
+    
+    <!-- Floating brush -->
+    <path
+        android:fillColor="?attr/colorPrimary"
+        android:pathData="M70,25 C74.4,25 78,21.4 78,17 C78,12.6 74.4,9 70,9 C65.6,9 62,12.6 62,17 C62,21.4 65.6,25 70,25 Z"
+        android:alpha="0.7" />
+</vector>

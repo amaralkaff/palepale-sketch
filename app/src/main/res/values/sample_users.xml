@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <!-- Sample User Names -->
+    <string-array name="sample_user_names">
+        <item>ArtisticAlex</item>
+        <item>CreativeChloe</item>
+        <item>DoodleDan</item>
+        <item>SketchySarah</item>
+        <item>PaintedPete</item>
+        <item>ColorfulCara</item>
+        <item>DrawingDiana</item>
+        <item>PixelPaul</item>
+        <item>BrushyBella</item>
+        <item>InkwellIan</item>
+        <item>CanvasCarl</item>
+        <item>PalettePatrick</item>
+        <item>ArtfulAnna</item>
+        <item>DesignDave</item>
+        <item>IllustrationIvy</item>
+    </string-array>
+    
+    <!-- Sample User Bios -->
+    <string-array name="sample_user_bios">
+        <item>Digital artist passionate about bringing imagination to life through colors and creativity!</item>
+        <item>Love creating whimsical characters and magical worlds. Art is my happy place! ✨</item>
+        <item>Sketch enthusiast exploring the beauty in everyday moments. Always learning something new!</item>
+        <item>Professional illustrator by day, dreamy doodler by night. Let\'s create together!</item>
+        <item>Beginner artist documenting my creative journey. Every stroke tells a story!</item>
+        <item>Nature lover who finds inspiration in the outdoors. Bringing landscapes to digital life!</item>
+        <item>Character design specialist with a love for storytelling through art.</item>
+        <item>Pixel art creator crafting retro-inspired digital masterpieces, one pixel at a time!</item>
+        <item>Abstract art explorer pushing the boundaries of color and form.</item>
+        <item>Traditional artist learning digital techniques. Old school meets new tech!</item>
+        <item>Art student sharing my progress and connecting with fellow creatives worldwide.</item>
+        <item>Weekend warrior artist escaping reality through creative expression.</item>
+        <item>Community art advocate promoting creativity and artistic collaboration.</item>
+        <item>Self-taught artist proving that passion and practice make perfect!</item>
+        <item>Art therapy enthusiast using creativity for mental wellness and joy.</item>
+    </string-array>
+    
+</resources>

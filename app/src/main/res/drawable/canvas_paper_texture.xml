@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Base paper color -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/canvas_paper_white" />
+        </shape>
+    </item>
+    
+    <!-- Subtle texture overlay -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/canvas_grid_light" />
+        </shape>
+    </item>
+</layer-list>

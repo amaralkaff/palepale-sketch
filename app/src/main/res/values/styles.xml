@@ -72,6 +72,34 @@
         <item name="android:fontWeight">400</item>
     </style>
     
+    <!-- Title styles -->
+    <style name="TextAppearance.Claude.Title.Large">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:fontFamily">@string/font_family_secondary</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:lineSpacingMultiplier">1.3</item>
+        <item name="android:fontWeight">500</item>
+    </style>
+    
+    <style name="TextAppearance.Claude.Title.Medium">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:fontFamily">@string/font_family_secondary</item>
+        <item name="android:letterSpacing">0.005</item>
+        <item name="android:lineSpacingMultiplier">1.35</item>
+        <item name="android:fontWeight">500</item>
+    </style>
+    
+    <style name="TextAppearance.Claude.Title.Small">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:fontFamily">@string/font_family_secondary</item>
+        <item name="android:letterSpacing">0.01</item>
+        <item name="android:lineSpacingMultiplier">1.4</item>
+        <item name="android:fontWeight">500</item>
+    </style>
+
     <!-- Label styles -->
     <style name="TextAppearance.Claude.Label.Large">
         <item name="android:textSize">14sp</item>
@@ -129,6 +157,7 @@
     <!-- Base style aliases (required by build system) -->
     <style name="TextAppearance.Claude.Display" parent="TextAppearance.Claude.Display.Large" />
     <style name="TextAppearance.Claude.Headline" parent="TextAppearance.Claude.Headline.Large" />
+    <style name="TextAppearance.Claude.Title" parent="TextAppearance.Claude.Title.Large" />
     <style name="TextAppearance.Claude.Body" parent="TextAppearance.Claude.Body.Large" />
     <style name="TextAppearance.Claude.Label" parent="TextAppearance.Claude.Label.Large" />
     

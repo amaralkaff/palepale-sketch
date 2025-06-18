@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    
+    <item
+        android:id="@+id/action_search"
+        android:title="Search"
+        android:icon="@drawable/ic_navigation_search"
+        app:showAsAction="ifRoom"
+        android:contentDescription="Search artwork" />
+    
+    <item
+        android:id="@+id/action_filter"
+        android:title="Filter"
+        android:icon="@drawable/ic_navigation_gallery"
+        app:showAsAction="ifRoom"
+        android:contentDescription="Filter gallery" />
+    
+</menu>

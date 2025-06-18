@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Canvas and Drawing Colors -->
+    <color name="canvas_paper_white">#FFFFFFFF</color>
+    <color name="canvas_paper_cream">#FFF8F4E6</color>
+    <color name="canvas_paper_gray">#FFF5F5F5</color>
+    <color name="canvas_grid_light">#1A000000</color>
+    
+    <!-- Brush Colors -->
+    <color name="brush_black">#FF000000</color>
+    <color name="brush_red">#FFF44336</color>
+    <color name="brush_blue">#FF2196F3</color>
+    <color name="brush_green">#FF4CAF50</color>
+    
+    <!-- Gradient Colors -->
+    <color name="gradient_start_primary">#FF6750A4</color>
+    <color name="gradient_end_primary">#FF7F39FB</color>
+    <color name="gradient_start_secondary">#FF625B71</color>
+    <color name="gradient_end_secondary">#FF7D5260</color>
+    
+    <!-- UI Enhancement Colors -->
+    <color name="shadow_light">#0D000000</color>
+    <color name="overlay_dark">#80000000</color>
+    <color name="overlay_light">#40FFFFFF</color>
+</resources>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <!-- Success Messages -->
+    <string name="success_drawing_saved">Your masterpiece has been saved! 🎨</string>
+    <string name="success_drawing_shared">Artwork shared with the community!</string>
+    <string name="success_profile_updated">Profile updated successfully!</string>
+    <string name="success_comment_posted">Comment added! Keep the conversation going!</string>
+    <string name="success_like_added">Liked! Spreading the artistic love! ❤️</string>
+    
+    <!-- Error Messages -->
+    <string name="error_network_connection">Oops! Check your internet connection and try again.</string>
+    <string name="error_save_failed">Couldn\'t save your drawing. Please try again.</string>
+    <string name="error_load_failed">Having trouble loading content. Tap to retry.</string>
+    <string name="error_permission_storage">We need storage permission to save your amazing artwork!</string>
+    <string name="error_permission_camera">Camera access needed for profile pictures and references.</string>
+    <string name="error_drawing_too_large">Drawing file is too large. Try reducing complexity.</string>
+    <string name="error_invalid_format">Unsupported file format. Please use PNG or JPG.</string>
+    
+    <!-- Warning Messages -->
+    <string name="warning_unsaved_changes">You have unsaved changes. Save before leaving?</string>
+    <string name="warning_delete_drawing">Delete this drawing? This action cannot be undone.</string>
+    <string name="warning_clear_canvas">Clear the entire canvas? All current work will be lost.</string>
+    <string name="warning_storage_low">Storage space is running low. Consider freeing up space.</string>
+    
+    <!-- Info Messages -->
+    <string name="info_drawing_auto_saved">Progress automatically saved</string>
+    <string name="info_daily_prompt_updated">New daily prompt available!</string>
+    <string name="info_feature_coming_soon">This exciting feature is coming soon!</string>
+    <string name="info_first_drawing">This is your first drawing! Welcome to the community!</string>
+    <string name="info_streak_milestone">Congratulations! You\'ve reached a %1$d day streak! 🎉</string>
+    
+    <!-- Loading Messages -->
+    <string name="loading_saving_drawing">Saving your masterpiece...</string>
+    <string name="loading_uploading_image">Sharing with the community...</string>
+    <string name="loading_gallery_content">Loading amazing artwork...</string>
+    <string name="loading_user_profile">Loading artist profile...</string>
+    <string name="loading_daily_prompt">Getting today\'s creative challenge...</string>
+    
+</resources>
