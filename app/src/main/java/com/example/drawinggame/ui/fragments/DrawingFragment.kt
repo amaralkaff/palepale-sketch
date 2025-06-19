@@ -16,7 +16,13 @@ import com.example.drawinggame.ui.drawing.brush.BrushManager
 import com.example.drawinggame.ui.drawing.brush.BrushPreviewView
 import com.example.drawinggame.ui.drawing.contracts.DrawingListener
 import com.example.drawinggame.ui.drawing.models.DrawingTool
+import com.example.drawinggame.ui.drawing.layers.ui.LayerPanelFragment
+import com.example.drawinggame.ui.drawing.selection.ui.SelectionOverlayView
+import com.example.drawinggame.ui.drawing.selection.ui.SelectionToolbar
+import com.example.drawinggame.ui.drawing.selection.core.SelectionType
+import com.example.drawinggame.ui.drawing.selection.core.SelectionManager
 import com.google.android.material.slider.Slider
+import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.launch
 
 class DrawingFragment : BaseFragment<FragmentDrawingBinding>() {
@@ -26,8 +32,17 @@ class DrawingFragment : BaseFragment<FragmentDrawingBinding>() {
     private lateinit var drawingEngine: DrawingEngine
     private lateinit var brushManager: BrushManager
     
+    // Advanced components
+    private lateinit var layerPanelFragment: LayerPanelFragment
+    private lateinit var selectionManager: SelectionManager
+    private lateinit var selectionOverlay: SelectionOverlayView
+    
     // Color selection
     private var selectedColorView: View? = null
+    
+    // Current mode
+    private enum class DrawingMode { DRAW, LAYERS, SELECT }
+    private var currentMode = DrawingMode.DRAW
     
     // Color map - linking color IDs to actual colors
     private val colorMap = mapOf(
@@ -50,6 +65,12 @@ class DrawingFragment : BaseFragment<FragmentDrawingBinding>() {
         
         // Initialize drawing components
         setupDrawingComponents()
+        
+        // Set up advanced components
+        setupAdvancedComponents()
+        
+        // Set up tool tabs
+        setupToolTabs()
         
         // Set up brush settings
         setupBrushSettings()
@@ -144,6 +165,131 @@ class DrawingFragment : BaseFragment<FragmentDrawingBinding>() {
                 updateUndoRedoState()
             }
         })
+    }
+    
+    private fun setupAdvancedComponents() {
+        // Initialize selection manager
+        selectionManager = SelectionManager()
+        
+        // Initialize selection overlay
+        selectionOverlay = binding.selectionOverlay
+        
+        // Initialize layer panel fragment
+        layerPanelFragment = LayerPanelFragment()
+        
+        // Set up selection toolbar
+        binding.selectionToolbar.setOnToolSelectedListener { toolType ->
+            // Switch selection tool
+            selectionManager.setActiveTool(toolType)
+        }
+        
+        binding.selectionToolbar.setOnSelectionOperationListener { operation ->
+            handleSelectionOperation(operation)
+        }
+    }
+    
+    private fun setupToolTabs() {
+        binding.toolTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when (tab?.position) {
+                    0 -> switchToDrawMode()
+                    1 -> switchToLayerMode()
+                    2 -> switchToSelectionMode()
+                }
+            }
+            
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
+    }
+    
+    private fun switchToDrawMode() {
+        currentMode = DrawingMode.DRAW
+        binding.drawingToolsCard.visibility = View.VISIBLE
+        binding.layerPanelContainer.visibility = View.GONE
+        binding.selectionToolbar.visibility = View.GONE
+        binding.selectionOverlay.visibility = View.GONE
+    }
+    
+    private fun switchToLayerMode() {
+        currentMode = DrawingMode.LAYERS
+        binding.drawingToolsCard.visibility = View.GONE
+        binding.layerPanelContainer.visibility = View.VISIBLE
+        binding.selectionToolbar.visibility = View.GONE
+        binding.selectionOverlay.visibility = View.GONE
+        
+        // Add layer fragment if not already added
+        if (!layerPanelFragment.isAdded) {
+            childFragmentManager.beginTransaction()
+                .replace(R.id.layerPanelContainer, layerPanelFragment)
+                .commit()
+        }
+    }
+    
+    private fun switchToSelectionMode() {
+        currentMode = DrawingMode.SELECT
+        binding.drawingToolsCard.visibility = View.GONE
+        binding.layerPanelContainer.visibility = View.GONE
+        binding.selectionToolbar.visibility = View.VISIBLE
+        binding.selectionOverlay.visibility = View.VISIBLE
+    }
+    
+    private fun handleSelectionOperation(operation: SelectionToolbar.SelectionOperation) {
+        when (operation) {
+            SelectionToolbar.SelectionOperation.SELECT_ALL -> {
+                // Select entire canvas
+                selectionManager.selectAll(drawingView.width.toFloat(), drawingView.height.toFloat())
+                updateSelectionUI()
+            }
+            SelectionToolbar.SelectionOperation.DESELECT -> {
+                selectionManager.clearSelection()
+                updateSelectionUI()
+            }
+            SelectionToolbar.SelectionOperation.INVERT -> {
+                selectionManager.invertSelection()
+                updateSelectionUI()
+            }
+            SelectionToolbar.SelectionOperation.FEATHER -> {
+                selectionManager.getCurrentSelection()?.let { selection ->
+                    selectionManager.featherSelection(selection.id, 5f)
+                    updateSelectionUI()
+                }
+            }
+            SelectionToolbar.SelectionOperation.EXPAND -> {
+                selectionManager.getCurrentSelection()?.let { selection ->
+                    selectionManager.expandSelection(selection.id, 5f)
+                    updateSelectionUI()
+                }
+            }
+            SelectionToolbar.SelectionOperation.CONTRACT -> {
+                selectionManager.getCurrentSelection()?.let { selection ->
+                    selectionManager.contractSelection(selection.id, 5f)
+                    updateSelectionUI()
+                }
+            }
+            SelectionToolbar.SelectionOperation.COPY -> {
+                // TODO: Implement copy functionality
+                Toast.makeText(context, "Copy selection", Toast.LENGTH_SHORT).show()
+            }
+            SelectionToolbar.SelectionOperation.CUT -> {
+                // TODO: Implement cut functionality
+                Toast.makeText(context, "Cut selection", Toast.LENGTH_SHORT).show()
+            }
+            SelectionToolbar.SelectionOperation.PASTE -> {
+                // TODO: Implement paste functionality
+                Toast.makeText(context, "Paste selection", Toast.LENGTH_SHORT).show()
+            }
+            SelectionToolbar.SelectionOperation.DELETE -> {
+                // TODO: Implement delete functionality
+                Toast.makeText(context, "Delete selection", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    
+    private fun updateSelectionUI() {
+        val currentSelection = selectionManager.getCurrentSelection()
+        selectionOverlay.setSelection(currentSelection)
+        binding.selectionToolbar.enableSelectionOperations(currentSelection != null)
     }
     
     private fun setupBrushSettings() {

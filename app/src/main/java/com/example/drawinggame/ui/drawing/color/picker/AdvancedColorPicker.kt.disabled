@@ -1,0 +1,790 @@
+package com.example.drawinggame.ui.drawing.color.picker
+
+import android.content.Context
+import android.graphics.*
+import android.util.AttributeSet
+import android.view.MotionEvent
+import android.view.View
+import com.example.drawinggame.ui.drawing.color.core.*
+import kotlin.math.*
+
+/**
+ * Advanced color picker with multiple input methods and color models
+ */
+class AdvancedColorPicker @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
+    
+    // Color management
+    private val colorManager = ColorManager.getInstance()
+    private val colorValidator = ColorValidator.getInstance()
+    private val harmonyGenerator = ColorHarmonyGenerator()
+    
+    // Current state
+    private var colorModel: ColorModel = ColorModel.HSV
+    private var currentColor: Int = Color.BLACK
+    private var pickerType: ColorPickerType = ColorPickerType.WHEEL
+    private val colorHistory = mutableListOf<Int>()
+    private var maxHistorySize = 20
+    
+    // Color picker modes
+    private var isEyedropperActive = false
+    private var showHarmonyColors = false
+    private var currentHarmonyType = HarmonyType.COMPLEMENTARY
+    
+    // Touch interaction
+    private var isDragging = false
+    private var lastTouchX = 0f
+    private var lastTouchY = 0f
+    
+    // Listeners
+    private var colorChangeListener: ((Int) -> Unit)? = null
+    private var colorSelectionListener: ((Int) -> Unit)? = null
+    
+    // Drawing components
+    private val colorWheelPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val trianglePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val cursorPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.WHITE
+        style = Paint.Style.STROKE
+        strokeWidth = 3f
+    }
+    private val shadowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.BLACK
+        style = Paint.Style.STROKE
+        strokeWidth = 1f
+    }
+    
+    // Geometry
+    private var centerX = 0f
+    private var centerY = 0f
+    private var wheelRadius = 0f
+    private var triangleRadius = 0f
+    private val wheelThickness = 40f
+    
+    // Current HSV values
+    private var currentHue = 0f
+    private var currentSaturation = 1f
+    private var currentValue = 1f
+    
+    // Color wheel bitmap cache
+    private var wheelBitmap: Bitmap? = null
+    private var triangleBitmap: Bitmap? = null
+    private var bitmapCanvas: Canvas? = null
+    
+    init {
+        // Initialize with default color
+        setColor(Color.RED)
+        
+        // Add to color history
+        addToHistory(currentColor)
+    }
+    
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        
+        centerX = w / 2f
+        centerY = h / 2f
+        wheelRadius = (minOf(w, h) / 2f) - wheelThickness
+        triangleRadius = wheelRadius - wheelThickness / 2f
+        
+        // Create color wheel bitmap
+        createColorWheelBitmap()
+        createTriangleBitmap()
+    }
+    
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        
+        when (pickerType) {
+            ColorPickerType.WHEEL -> drawColorWheel(canvas)
+            ColorPickerType.SLIDER -> drawColorSliders(canvas)
+            ColorPickerType.GRID -> drawColorGrid(canvas)
+            ColorPickerType.GRADIENT -> drawGradientPicker(canvas)
+            ColorPickerType.HARMONY -> drawHarmonyPicker(canvas)
+            else -> drawColorWheel(canvas) // Default fallback
+        }
+        
+        // Draw additional elements
+        if (showHarmonyColors) {
+            drawHarmonyColors(canvas)
+        }
+        
+        if (isEyedropperActive) {
+            drawEyedropperCursor(canvas)
+        }
+    }
+    
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        val x = event.x
+        val y = event.y
+        
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                isDragging = true
+                lastTouchX = x
+                lastTouchY = y
+                
+                if (isEyedropperActive) {
+                    sampleColorAtPoint(x, y)
+                } else {
+                    handleColorSelection(x, y)
+                }
+                return true
+            }
+            
+            MotionEvent.ACTION_MOVE -> {
+                if (isDragging) {
+                    lastTouchX = x
+                    lastTouchY = y
+                    
+                    if (isEyedropperActive) {
+                        sampleColorAtPoint(x, y)
+                    } else {
+                        handleColorSelection(x, y)
+                    }
+                    invalidate()
+                }
+                return true
+            }
+            
+            MotionEvent.ACTION_UP -> {
+                isDragging = false
+                
+                if (isEyedropperActive) {
+                    isEyedropperActive = false
+                    invalidate()
+                }
+                
+                // Notify selection completed
+                colorSelectionListener?.invoke(currentColor)
+                return true
+            }
+        }
+        
+        return false
+    }
+    
+    /**
+     * Handle color selection based on picker type
+     */
+    private fun handleColorSelection(x: Float, y: Float) {
+        when (pickerType) {
+            ColorPickerType.WHEEL -> handleWheelSelection(x, y)
+            ColorPickerType.SLIDER -> handleSliderSelection(x, y)
+            ColorPickerType.GRID -> handleGridSelection(x, y)
+            ColorPickerType.GRADIENT -> handleGradientSelection(x, y)
+            ColorPickerType.HARMONY -> handleHarmonySelection(x, y)
+            else -> handleWheelSelection(x, y)
+        }
+    }
+    
+    /**
+     * Handle color wheel selection
+     */
+    private fun handleWheelSelection(x: Float, y: Float) {
+        val dx = x - centerX
+        val dy = y - centerY
+        val distance = sqrt(dx * dx + dy * dy)
+        
+        if (distance >= wheelRadius - wheelThickness && distance <= wheelRadius) {
+            // Hue selection in wheel
+            val angle = atan2(dy, dx) * 180f / PI.toFloat()
+            currentHue = (angle + 360f) % 360f
+            updateColorFromHSV()
+        } else if (distance < triangleRadius) {
+            // Saturation/Value selection in triangle
+            updateSaturationValue(x, y)
+        }
+    }
+    
+    /**
+     * Update saturation and value from triangle coordinates
+     */
+    private fun updateSaturationValue(x: Float, y: Float) {
+        // Convert touch point to triangle coordinates
+        val dx = x - centerX
+        val dy = y - centerY
+        
+        // Rotate point by negative hue angle to align with triangle
+        val hueRadians = -currentHue * PI.toFloat() / 180f
+        val cos = cos(hueRadians)
+        val sin = sin(hueRadians)
+        
+        val rotatedX = dx * cos - dy * sin
+        val rotatedY = dx * sin + dy * cos
+        
+        // Calculate saturation and value from triangle position
+        val triangleHeight = triangleRadius * sin(PI.toFloat() / 3f)
+        val triangleBase = triangleRadius
+        
+        // Normalize coordinates to 0-1 range
+        val normalizedX = (rotatedX + triangleBase / 2f) / triangleBase
+        val normalizedY = (rotatedY + triangleHeight / 2f) / triangleHeight
+        
+        currentSaturation = normalizedX.coerceIn(0f, 1f)
+        currentValue = (1f - normalizedY).coerceIn(0f, 1f)
+        
+        updateColorFromHSV()
+    }
+    
+    /**
+     * Handle slider selection
+     */
+    private fun handleSliderSelection(x: Float, y: Float) {
+        val sliderHeight = height / colorModel.componentCount.toFloat()
+        val sliderIndex = (y / sliderHeight).toInt().coerceIn(0, colorModel.componentCount - 1)
+        
+        val normalizedX = (x / width).coerceIn(0f, 1f)
+        val range = colorModel.getComponentRange(sliderIndex)
+        val value = range.first + normalizedX * (range.second - range.first)
+        
+        updateColorComponent(sliderIndex, value)
+    }
+    
+    /**
+     * Handle grid selection
+     */
+    private fun handleGridSelection(x: Float, y: Float) {
+        // Implementation for color grid selection
+        // This would typically involve predefined color swatches
+    }
+    
+    /**
+     * Handle gradient selection
+     */
+    private fun handleGradientSelection(x: Float, y: Float) {
+        // Implementation for gradient-based color selection
+    }
+    
+    /**
+     * Handle harmony selection
+     */
+    private fun handleHarmonySelection(x: Float, y: Float) {
+        // Implementation for harmony-based color selection
+    }
+    
+    /**
+     * Sample color at specific point (eyedropper functionality)
+     */
+    private fun sampleColorAtPoint(x: Float, y: Float) {
+        // In a real implementation, this would sample from a source bitmap
+        // For now, we'll just use the current color wheel
+        wheelBitmap?.let { bitmap ->
+            val pixelX = x.toInt().coerceIn(0, bitmap.width - 1)
+            val pixelY = y.toInt().coerceIn(0, bitmap.height - 1)
+            val sampledColor = bitmap.getPixel(pixelX, pixelY)
+            
+            if (sampledColor != Color.TRANSPARENT) {
+                setColor(sampledColor)
+            }
+        }
+    }
+    
+    /**
+     * Update current color from HSV values
+     */
+    private fun updateColorFromHSV() {
+        val rgb = colorManager.hsvToRgb(floatArrayOf(currentHue, currentSaturation, currentValue))
+        val newColor = Color.rgb(rgb[0], rgb[1], rgb[2])
+        
+        if (newColor != currentColor) {
+            currentColor = newColor
+            colorChangeListener?.invoke(currentColor)
+            invalidate()
+        }
+    }
+    
+    /**
+     * Update specific color component
+     */
+    private fun updateColorComponent(componentIndex: Int, value: Float) {
+        when (colorModel) {
+            ColorModel.RGB -> updateRGBComponent(componentIndex, value)
+            ColorModel.HSV -> updateHSVComponent(componentIndex, value)
+            ColorModel.HSL -> updateHSLComponent(componentIndex, value)
+            ColorModel.CMYK -> updateCMYKComponent(componentIndex, value)
+            ColorModel.LAB -> updateLABComponent(componentIndex, value)
+        }
+    }
+    
+    private fun updateRGBComponent(index: Int, value: Float) {
+        val rgb = intArrayOf(Color.red(currentColor), Color.green(currentColor), Color.blue(currentColor))
+        rgb[index] = value.toInt().coerceIn(0, 255)
+        currentColor = Color.rgb(rgb[0], rgb[1], rgb[2])
+        
+        // Update HSV values
+        val hsv = colorManager.rgbToHsv(rgb)
+        currentHue = hsv[0]
+        currentSaturation = hsv[1]
+        currentValue = hsv[2]
+        
+        colorChangeListener?.invoke(currentColor)
+        invalidate()
+    }
+    
+    private fun updateHSVComponent(index: Int, value: Float) {
+        when (index) {
+            0 -> currentHue = value
+            1 -> currentSaturation = value / 100f
+            2 -> currentValue = value / 100f
+        }
+        updateColorFromHSV()
+    }
+    
+    private fun updateHSLComponent(index: Int, value: Float) {
+        val currentHsl = colorManager.rgbToHsl(intArrayOf(
+            Color.red(currentColor), Color.green(currentColor), Color.blue(currentColor)
+        ))
+        
+        when (index) {
+            0 -> currentHsl[0] = value
+            1 -> currentHsl[1] = value / 100f
+            2 -> currentHsl[2] = value / 100f
+        }
+        
+        val rgb = colorManager.hslToRgb(currentHsl)
+        currentColor = Color.rgb(rgb[0], rgb[1], rgb[2])
+        
+        // Update HSV for consistency
+        val hsv = colorManager.rgbToHsv(rgb)
+        currentHue = hsv[0]
+        currentSaturation = hsv[1]
+        currentValue = hsv[2]
+        
+        colorChangeListener?.invoke(currentColor)
+        invalidate()
+    }
+    
+    private fun updateCMYKComponent(index: Int, value: Float) {
+        val currentCmyk = colorManager.rgbToCmyk(intArrayOf(
+            Color.red(currentColor), Color.green(currentColor), Color.blue(currentColor)
+        ))
+        
+        currentCmyk[index] = value / 100f
+        
+        val rgb = colorManager.cmykToRgb(currentCmyk)
+        currentColor = Color.rgb(rgb[0], rgb[1], rgb[2])
+        
+        // Update HSV for consistency
+        val hsv = colorManager.rgbToHsv(rgb)
+        currentHue = hsv[0]
+        currentSaturation = hsv[1]
+        currentValue = hsv[2]
+        
+        colorChangeListener?.invoke(currentColor)
+        invalidate()
+    }
+    
+    private fun updateLABComponent(index: Int, value: Float) {
+        val currentLab = colorManager.rgbToLab(intArrayOf(
+            Color.red(currentColor), Color.green(currentColor), Color.blue(currentColor)
+        ))
+        
+        currentLab[index] = value
+        
+        val rgb = colorManager.labToRgb(currentLab)
+        currentColor = Color.rgb(rgb[0], rgb[1], rgb[2])
+        
+        // Update HSV for consistency
+        val hsv = colorManager.rgbToHsv(rgb)
+        currentHue = hsv[0]
+        currentSaturation = hsv[1]
+        currentValue = hsv[2]
+        
+        colorChangeListener?.invoke(currentColor)
+        invalidate()
+    }
+    
+    /**
+     * Draw color wheel
+     */
+    private fun drawColorWheel(canvas: Canvas) {
+        // Draw cached wheel bitmap
+        wheelBitmap?.let { bitmap ->
+            canvas.drawBitmap(bitmap, 0f, 0f, null)
+        }
+        
+        // Draw saturation/value triangle
+        triangleBitmap?.let { bitmap ->
+            canvas.save()
+            canvas.rotate(currentHue, centerX, centerY)
+            canvas.drawBitmap(bitmap, centerX - triangleRadius, centerY - triangleRadius, null)
+            canvas.restore()
+        }
+        
+        // Draw hue cursor
+        drawHueCursor(canvas)
+        
+        // Draw saturation/value cursor
+        drawSaturationValueCursor(canvas)
+    }
+    
+    /**
+     * Draw color sliders
+     */
+    private fun drawColorSliders(canvas: Canvas) {
+        val sliderHeight = height / colorModel.componentCount.toFloat()
+        
+        for (i in 0 until colorModel.componentCount) {
+            val top = i * sliderHeight
+            val bottom = top + sliderHeight
+            
+            drawColorSlider(canvas, i, 0f, top, width.toFloat(), bottom)
+        }
+    }
+    
+    /**
+     * Draw individual color slider
+     */
+    private fun drawColorSlider(canvas: Canvas, componentIndex: Int, left: Float, top: Float, right: Float, bottom: Float) {
+        val rect = RectF(left, top, right, bottom)
+        val range = colorModel.getComponentRange(componentIndex)
+        
+        // Create gradient for this component
+        val colors = IntArray(100)
+        for (i in 0 until 100) {
+            val value = range.first + (i / 99f) * (range.second - range.first)
+            colors[i] = getColorForComponent(componentIndex, value)
+        }
+        
+        val gradient = LinearGradient(left, 0f, right, 0f, colors, null, Shader.TileMode.CLAMP)
+        val gradientPaint = Paint().apply { shader = gradient }
+        
+        canvas.drawRect(rect, gradientPaint)
+        
+        // Draw current value indicator
+        val currentValue = getCurrentComponentValue(componentIndex)
+        val normalizedValue = (currentValue - range.first) / (range.second - range.first)
+        val indicatorX = left + normalizedValue * (right - left)
+        
+        canvas.drawLine(indicatorX, top, indicatorX, bottom, cursorPaint)
+    }
+    
+    /**
+     * Get color for specific component value
+     */
+    private fun getColorForComponent(componentIndex: Int, value: Float): Int {
+        return when (colorModel) {
+            ColorModel.RGB -> {
+                val rgb = intArrayOf(Color.red(currentColor), Color.green(currentColor), Color.blue(currentColor))
+                rgb[componentIndex] = value.toInt().coerceIn(0, 255)
+                Color.rgb(rgb[0], rgb[1], rgb[2])
+            }
+            ColorModel.HSV -> {
+                val hsv = floatArrayOf(currentHue, currentSaturation, currentValue)
+                when (componentIndex) {
+                    0 -> hsv[0] = value
+                    1 -> hsv[1] = value / 100f
+                    2 -> hsv[2] = value / 100f
+                }
+                val rgb = colorManager.hsvToRgb(hsv)
+                Color.rgb(rgb[0], rgb[1], rgb[2])
+            }
+            // Add other color models as needed
+            else -> currentColor
+        }
+    }
+    
+    /**
+     * Get current component value
+     */
+    private fun getCurrentComponentValue(componentIndex: Int): Float {
+        return when (colorModel) {
+            ColorModel.RGB -> {
+                when (componentIndex) {
+                    0 -> Color.red(currentColor).toFloat()
+                    1 -> Color.green(currentColor).toFloat()
+                    2 -> Color.blue(currentColor).toFloat()
+                    else -> 0f
+                }
+            }
+            ColorModel.HSV -> {
+                when (componentIndex) {
+                    0 -> currentHue
+                    1 -> currentSaturation * 100f
+                    2 -> currentValue * 100f
+                    else -> 0f
+                }
+            }
+            // Add other color models as needed
+            else -> 0f
+        }
+    }
+    
+    /**
+     * Draw color grid
+     */
+    private fun drawColorGrid(canvas: Canvas) {
+        // Implementation for predefined color swatches
+    }
+    
+    /**
+     * Draw harmony colors
+     */
+    private fun drawHarmonyColors(canvas: Canvas) {
+        val harmony = harmonyGenerator.generateHarmony(currentColor, currentHarmonyType)
+        val colorSize = 40f
+        val spacing = 10f
+        val startX = width - harmony.colors.size * (colorSize + spacing)
+        val startY = 20f
+        
+        harmony.colors.forEachIndexed { index, color ->
+            val x = startX + index * (colorSize + spacing)
+            val rect = RectF(x, startY, x + colorSize, startY + colorSize)
+            
+            colorWheelPaint.color = color
+            canvas.drawRoundRect(rect, 8f, 8f, colorWheelPaint)
+            
+            // Draw border
+            canvas.drawRoundRect(rect, 8f, 8f, shadowPaint)
+        }
+    }
+    
+    /**
+     * Draw eyedropper cursor
+     */
+    private fun drawEyedropperCursor(canvas: Canvas) {
+        // Draw crosshair cursor at touch position
+        val crossSize = 20f
+        
+        canvas.drawLine(
+            lastTouchX - crossSize, lastTouchY,
+            lastTouchX + crossSize, lastTouchY,
+            cursorPaint
+        )
+        
+        canvas.drawLine(
+            lastTouchX, lastTouchY - crossSize,
+            lastTouchX, lastTouchY + crossSize,
+            cursorPaint
+        )
+        
+        canvas.drawCircle(lastTouchX, lastTouchY, crossSize / 2f, shadowPaint)
+    }
+    
+    /**
+     * Draw hue cursor on color wheel
+     */
+    private fun drawHueCursor(canvas: Canvas) {
+        val hueAngle = currentHue * PI.toFloat() / 180f
+        val cursorRadius = wheelRadius - wheelThickness / 2f
+        val cursorX = centerX + cos(hueAngle) * cursorRadius
+        val cursorY = centerY + sin(hueAngle) * cursorRadius
+        
+        canvas.drawCircle(cursorX, cursorY, 8f, cursorPaint)
+        canvas.drawCircle(cursorX, cursorY, 6f, shadowPaint)
+    }
+    
+    /**
+     * Draw saturation/value cursor
+     */
+    private fun drawSaturationValueCursor(canvas: Canvas) {
+        // Calculate cursor position in triangle
+        val hueRadians = currentHue * PI.toFloat() / 180f
+        val triangleHeight = triangleRadius * sin(PI.toFloat() / 3f)
+        val triangleBase = triangleRadius
+        
+        // Convert saturation/value to triangle coordinates
+        val localX = currentSaturation * triangleBase - triangleBase / 2f
+        val localY = (1f - currentValue) * triangleHeight - triangleHeight / 2f
+        
+        // Rotate by hue angle
+        val cos = cos(hueRadians)
+        val sin = sin(hueRadians)
+        val cursorX = centerX + localX * cos - localY * sin
+        val cursorY = centerY + localX * sin + localY * cos
+        
+        canvas.drawCircle(cursorX, cursorY, 6f, cursorPaint)
+        canvas.drawCircle(cursorX, cursorY, 4f, shadowPaint)
+    }
+    
+    /**
+     * Create color wheel bitmap
+     */
+    private fun createColorWheelBitmap() {
+        if (width <= 0 || height <= 0) return
+        
+        wheelBitmap?.recycle()
+        wheelBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        bitmapCanvas = Canvas(wheelBitmap!!)
+        
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        
+        // Draw color wheel
+        for (i in 0..360) {
+            val hue = i.toFloat()
+            val rgb = colorManager.hsvToRgb(floatArrayOf(hue, 1f, 1f))
+            paint.color = Color.rgb(rgb[0], rgb[1], rgb[2])
+            
+            val startAngle = hue - 0.5f
+            val sweepAngle = 1f
+            
+            val rect = RectF(
+                centerX - wheelRadius,
+                centerY - wheelRadius,
+                centerX + wheelRadius,
+                centerY + wheelRadius
+            )
+            
+            val innerRect = RectF(
+                centerX - wheelRadius + wheelThickness,
+                centerY - wheelRadius + wheelThickness,
+                centerX + wheelRadius - wheelThickness,
+                centerY + wheelRadius - wheelThickness
+            )
+            
+            // Create arc path
+            val path = Path()
+            path.arcTo(rect, startAngle, sweepAngle)
+            path.arcTo(innerRect, startAngle + sweepAngle, -sweepAngle)
+            path.close()
+            
+            bitmapCanvas?.drawPath(path, paint)
+        }
+    }
+    
+    /**
+     * Create saturation/value triangle bitmap
+     */
+    private fun createTriangleBitmap() {
+        val size = (triangleRadius * 2).toInt()
+        if (size <= 0) return
+        
+        triangleBitmap?.recycle()
+        triangleBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        val triangleCanvas = Canvas(triangleBitmap!!)
+        
+        // Draw saturation/value triangle for white color (will be tinted by hue)
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        
+        for (y in 0 until size) {
+            for (x in 0 until size) {
+                val centerOffset = size / 2f
+                val localX = x - centerOffset
+                val localY = y - centerOffset
+                
+                // Check if point is inside triangle
+                if (isPointInTriangle(localX, localY, triangleRadius)) {
+                    val saturation = (localX + centerOffset) / size
+                    val value = 1f - (localY + centerOffset) / size
+                    
+                    val rgb = colorManager.hsvToRgb(floatArrayOf(0f, saturation, value))
+                    paint.color = Color.rgb(rgb[0], rgb[1], rgb[2])
+                    triangleCanvas.drawPoint(x.toFloat(), y.toFloat(), paint)
+                }
+            }
+        }
+    }
+    
+    /**
+     * Check if point is inside equilateral triangle
+     */
+    private fun isPointInTriangle(x: Float, y: Float, radius: Float): Boolean {
+        val triangleHeight = radius * sin(PI.toFloat() / 3f)
+        val triangleBase = radius
+        
+        // Simple triangle bounds check
+        return abs(x) <= triangleBase / 2f && 
+               y >= -triangleHeight / 2f && 
+               y <= triangleHeight / 2f
+    }
+    
+    // Public API methods
+    
+    /**
+     * Set current color
+     */
+    fun setColor(color: Int) {
+        currentColor = color
+        
+        // Update HSV values
+        val hsv = colorManager.rgbToHsv(intArrayOf(
+            Color.red(color), Color.green(color), Color.blue(color)
+        ))
+        currentHue = hsv[0]
+        currentSaturation = hsv[1]
+        currentValue = hsv[2]
+        
+        addToHistory(color)
+        invalidate()
+    }
+    
+    /**
+     * Get current color
+     */
+    fun getColor(): Int = currentColor
+    
+    /**
+     * Set color model
+     */
+    fun setColorModel(model: ColorModel) {
+        colorModel = model
+        invalidate()
+    }
+    
+    /**
+     * Set picker type
+     */
+    fun setPickerType(type: ColorPickerType) {
+        pickerType = type
+        invalidate()
+    }
+    
+    /**
+     * Set color change listener
+     */
+    fun setOnColorChangeListener(listener: (Int) -> Unit) {
+        colorChangeListener = listener
+    }
+    
+    /**
+     * Set color selection listener
+     */
+    fun setOnColorSelectionListener(listener: (Int) -> Unit) {
+        colorSelectionListener = listener
+    }
+    
+    /**
+     * Enable eyedropper mode
+     */
+    fun setEyedropperMode(enabled: Boolean) {
+        isEyedropperActive = enabled
+        invalidate()
+    }
+    
+    /**
+     * Show/hide harmony colors
+     */
+    fun setShowHarmonyColors(show: Boolean, harmonyType: HarmonyType = HarmonyType.COMPLEMENTARY) {
+        showHarmonyColors = show
+        currentHarmonyType = harmonyType
+        invalidate()
+    }
+    
+    /**
+     * Add color to history
+     */
+    private fun addToHistory(color: Int) {
+        if (!colorHistory.contains(color)) {
+            colorHistory.add(0, color)
+            if (colorHistory.size > maxHistorySize) {
+                colorHistory.removeAt(colorHistory.size - 1)
+            }
+        }
+    }
+    
+    /**
+     * Get color history
+     */
+    fun getColorHistory(): List<Int> = colorHistory.toList()
+    
+    /**
+     * Clear color history
+     */
+    fun clearHistory() {
+        colorHistory.clear()
+    }
+}

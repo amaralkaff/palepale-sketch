@@ -55,6 +55,7 @@
     
     <color name="background_primary">@color/claude_hero_500</color>
     <color name="on_background">@color/claude_text_primary</color>
+    <color name="surface">@color/white</color>
     <color name="surface_primary">@color/white</color>
     <color name="on_surface">@color/claude_text_primary</color>
     <color name="surface_variant">@color/claude_hero_100</color>

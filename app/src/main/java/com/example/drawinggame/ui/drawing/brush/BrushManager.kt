@@ -8,7 +8,7 @@ import com.example.drawinggame.ui.drawing.models.DrawingTool
  * Manages brush configuration and creation for different drawing tools.
  * Part of Phase 4.2: Basic Brush System implementation.
  */
-class BrushManager {
+open class BrushManager {
     
     // Brush property defaults
     private var currentSize = DrawingConstants.DEFAULT_BRUSH_SIZE

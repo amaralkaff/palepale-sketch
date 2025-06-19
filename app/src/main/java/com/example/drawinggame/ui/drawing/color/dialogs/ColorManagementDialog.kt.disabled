@@ -1,0 +1,521 @@
+package com.example.drawinggame.ui.drawing.color.dialogs
+
+import android.app.Dialog
+import android.content.Context
+import android.graphics.Color
+import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.*
+import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
+import com.example.drawinggame.R
+import com.example.drawinggame.ui.drawing.color.core.ColorManager
+import com.example.drawinggame.ui.drawing.color.palette.ColorPalette
+import com.example.drawinggame.ui.drawing.color.palette.PaletteManager
+import com.example.drawinggame.ui.drawing.color.picker.ColorPickerView
+import com.example.drawinggame.ui.drawing.color.picker.ColorPaletteView
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.slider.Slider
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
+
+/**
+ * Comprehensive color management dialog
+ * Provides color picker, palette management, and color space conversion
+ */
+class ColorManagementDialog : DialogFragment() {
+    
+    companion object {
+        private const val ARG_INITIAL_COLOR = "initial_color"
+        
+        fun newInstance(initialColor: Int = Color.RED): ColorManagementDialog {
+            return ColorManagementDialog().apply {
+                arguments = Bundle().apply {
+                    putInt(ARG_INITIAL_COLOR, initialColor)
+                }
+            }
+        }
+    }
+    
+    // UI Components
+    private lateinit var viewPager: ViewPager2
+    private lateinit var tabLayout: TabLayout
+    private lateinit var colorPreview: View
+    private lateinit var colorInfoCard: MaterialCardView
+    private lateinit var acceptButton: MaterialButton
+    private lateinit var cancelButton: MaterialButton
+    
+    // Color management
+    private val colorManager = ColorManager.getInstance()
+    private lateinit var paletteManager: PaletteManager
+    private var currentColor = Color.RED
+    private var colorChangeListener: ((Int) -> Unit)? = null
+    
+    // Tabs
+    private lateinit var pagerAdapter: ColorTabPagerAdapter
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.Theme_DrawingGame_Dialog_FullScreen)
+        
+        currentColor = arguments?.getInt(ARG_INITIAL_COLOR) ?: Color.RED
+        paletteManager = PaletteManager(requireContext())
+    }
+    
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.dialog_color_management, container, false)
+    }
+    
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        
+        initializeViews(view)
+        setupViewPager()
+        setupColorPreview()
+        setupButtons()
+        
+        updateColorInfo(currentColor)
+    }
+    
+    private fun initializeViews(view: View) {
+        viewPager = view.findViewById(R.id.colorViewPager)
+        tabLayout = view.findViewById(R.id.colorTabLayout)
+        colorPreview = view.findViewById(R.id.colorPreview)
+        colorInfoCard = view.findViewById(R.id.colorInfoCard)
+        acceptButton = view.findViewById(R.id.acceptColorButton)
+        cancelButton = view.findViewById(R.id.cancelColorButton)
+    }
+    
+    private fun setupViewPager() {
+        pagerAdapter = ColorTabPagerAdapter(this)
+        viewPager.adapter = pagerAdapter
+        
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = when (position) {
+                0 -> "Picker"
+                1 -> "Palettes"
+                2 -> "Input"
+                3 -> "Harmony"
+                else -> "Tab"
+            }
+        }.attach()
+    }
+    
+    private fun setupColorPreview() {
+        colorPreview.setBackgroundColor(currentColor)
+        colorPreview.setOnClickListener {
+            // Quick copy color functionality
+            copyColorToClipboard(currentColor)
+        }
+    }
+    
+    private fun setupButtons() {
+        acceptButton.setOnClickListener {
+            colorChangeListener?.invoke(currentColor)
+            dismiss()
+        }
+        
+        cancelButton.setOnClickListener {
+            dismiss()
+        }
+    }
+    
+    private fun updateColorInfo(color: Int) {
+        currentColor = color
+        colorPreview.setBackgroundColor(color)
+        
+        // Update color information display
+        val r = Color.red(color)
+        val g = Color.green(color)
+        val b = Color.blue(color)
+        val hex = String.format("#%06X", 0xFFFFFF and color)
+        
+        // Update all tabs with new color
+        pagerAdapter.updateColor(color)
+    }
+    
+    private fun copyColorToClipboard(color: Int) {
+        val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+        val hex = String.format("#%06X", 0xFFFFFF and color)
+        val clip = android.content.ClipData.newPlainText("Color", hex)
+        clipboard.setPrimaryClip(clip)
+        
+        Toast.makeText(context, "Color $hex copied to clipboard", Toast.LENGTH_SHORT).show()
+    }
+    
+    fun setOnColorChangeListener(listener: (Int) -> Unit) {
+        colorChangeListener = listener
+    }
+    
+    // Inner class for ViewPager adapter
+    private class ColorTabPagerAdapter(fragment: DialogFragment) : androidx.viewpager2.adapter.FragmentStateAdapter(fragment) {
+        
+        private val fragments = mutableListOf<ColorTabFragment>()
+        
+        init {
+            fragments.add(ColorPickerTabFragment())
+            fragments.add(ColorPaletteTabFragment())
+            fragments.add(ColorInputTabFragment())
+            fragments.add(ColorHarmonyTabFragment())
+        }
+        
+        override fun getItemCount(): Int = fragments.size
+        
+        override fun createFragment(position: Int): androidx.fragment.app.Fragment = fragments[position]
+        
+        fun updateColor(color: Int) {
+            fragments.forEach { it.updateColor(color) }
+        }
+    }
+    
+    // Base class for color tab fragments
+    abstract class ColorTabFragment : androidx.fragment.app.Fragment() {
+        protected var currentColor = Color.RED
+        protected var colorChangeListener: ((Int) -> Unit)? = null
+        
+        open fun updateColor(color: Int) {
+            currentColor = color
+            onColorUpdated(color)
+        }
+        
+        protected abstract fun onColorUpdated(color: Int)
+        
+        fun setColorChangeListener(listener: (Int) -> Unit) {
+            colorChangeListener = listener
+        }
+        
+        override fun onAttach(context: Context) {
+            super.onAttach(context)
+            if (parentFragment is ColorManagementDialog) {
+                val dialog = parentFragment as ColorManagementDialog
+                setColorChangeListener { color ->
+                    dialog.updateColorInfo(color)
+                }
+            }
+        }
+    }
+    
+    // Color picker tab
+    class ColorPickerTabFragment : ColorTabFragment() {
+        private lateinit var colorPickerView: ColorPickerView
+        
+        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+            return inflater.inflate(R.layout.fragment_color_picker_tab, container, false)
+        }
+        
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+            super.onViewCreated(view, savedInstanceState)
+            
+            colorPickerView = view.findViewById(R.id.colorPickerView)
+            colorPickerView.setColor(currentColor)
+            colorPickerView.setOnColorChangeListener { color ->
+                colorChangeListener?.invoke(color)
+            }
+        }
+        
+        override fun onColorUpdated(color: Int) {
+            if (::colorPickerView.isInitialized) {
+                colorPickerView.setColor(color)
+            }
+        }
+    }
+    
+    // Color palette tab
+    class ColorPaletteTabFragment : ColorTabFragment() {
+        private lateinit var paletteRecyclerView: RecyclerView
+        private lateinit var currentPaletteView: ColorPaletteView
+        private lateinit var paletteSpinner: Spinner
+        private lateinit var paletteManager: PaletteManager
+        private lateinit var paletteAdapter: PaletteListAdapter
+        
+        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+            return inflater.inflate(R.layout.fragment_color_palette_tab, container, false)
+        }
+        
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+            super.onViewCreated(view, savedInstanceState)
+            
+            paletteManager = PaletteManager(requireContext())
+            
+            currentPaletteView = view.findViewById(R.id.currentPaletteView)
+            paletteSpinner = view.findViewById(R.id.paletteSpinner)
+            paletteRecyclerView = view.findViewById(R.id.paletteRecyclerView)
+            
+            setupPaletteSpinner()
+            setupCurrentPalette()
+            setupPaletteList()
+        }
+        
+        private fun setupPaletteSpinner() {
+            val palettes = paletteManager.getBuiltInPalettes()
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, palettes.map { it.name })
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            paletteSpinner.adapter = adapter
+            
+            paletteSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    currentPaletteView.setPalette(palettes[position])
+                }
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+        }
+        
+        private fun setupCurrentPalette() {
+            currentPaletteView.setOnColorSelectedListener { color, _ ->
+                colorChangeListener?.invoke(color)
+            }
+        }
+        
+        private fun setupPaletteList() {
+            paletteAdapter = PaletteListAdapter { palette ->
+                currentPaletteView.setPalette(palette)
+            }
+            
+            paletteRecyclerView.layoutManager = LinearLayoutManager(context)
+            paletteRecyclerView.adapter = paletteAdapter
+            
+            // Load user palettes
+            paletteAdapter.updatePalettes(paletteManager.getUserPalettes())
+        }
+        
+        override fun onColorUpdated(color: Int) {
+            // Color updated from other tabs
+        }
+    }
+    
+    // Color input tab
+    class ColorInputTabFragment : ColorTabFragment() {
+        private lateinit var hexInput: TextInputEditText
+        private lateinit var rgbRedSlider: Slider
+        private lateinit var rgbGreenSlider: Slider
+        private lateinit var rgbBlueSlider: Slider
+        private lateinit var hslHueSlider: Slider
+        private lateinit var hslSaturationSlider: Slider
+        private lateinit var hslLightnessSlider: Slider
+        
+        private var isUpdatingFromSliders = false
+        
+        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+            return inflater.inflate(R.layout.fragment_color_input_tab, container, false)
+        }
+        
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+            super.onViewCreated(view, savedInstanceState)
+            
+            initializeViews(view)
+            setupHexInput()
+            setupRgbSliders()
+            setupHslSliders()
+            
+            updateInputs(currentColor)
+        }
+        
+        private fun initializeViews(view: View) {
+            hexInput = view.findViewById(R.id.hexColorInput)
+            rgbRedSlider = view.findViewById(R.id.rgbRedSlider)
+            rgbGreenSlider = view.findViewById(R.id.rgbGreenSlider)
+            rgbBlueSlider = view.findViewById(R.id.rgbBlueSlider)
+            hslHueSlider = view.findViewById(R.id.hslHueSlider)
+            hslSaturationSlider = view.findViewById(R.id.hslSaturationSlider)
+            hslLightnessSlider = view.findViewById(R.id.hslLightnessSlider)
+        }
+        
+        private fun setupHexInput() {
+            hexInput.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+                override fun afterTextChanged(s: Editable?) {
+                    if (isUpdatingFromSliders) return
+                    
+                    val hex = s.toString()
+                    try {
+                        val color = Color.parseColor(if (hex.startsWith("#")) hex else "#$hex")
+                        colorChangeListener?.invoke(color)
+                    } catch (e: IllegalArgumentException) {
+                        // Invalid hex color, ignore
+                    }
+                }
+            })
+        }
+        
+        private fun setupRgbSliders() {
+            val rgbChangeListener = Slider.OnChangeListener { _, _, _ ->
+                if (!isUpdatingFromSliders) {
+                    val r = rgbRedSlider.value.toInt()
+                    val g = rgbGreenSlider.value.toInt()
+                    val b = rgbBlueSlider.value.toInt()
+                    val color = Color.rgb(r, g, b)
+                    colorChangeListener?.invoke(color)
+                }
+            }
+            
+            rgbRedSlider.addOnChangeListener(rgbChangeListener)
+            rgbGreenSlider.addOnChangeListener(rgbChangeListener)
+            rgbBlueSlider.addOnChangeListener(rgbChangeListener)
+        }
+        
+        private fun setupHslSliders() {
+            val hslChangeListener = Slider.OnChangeListener { _, _, _ ->
+                if (!isUpdatingFromSliders) {
+                    val h = hslHueSlider.value
+                    val s = hslSaturationSlider.value / 100f
+                    val l = hslLightnessSlider.value / 100f
+                    
+                    val colorManager = ColorManager.getInstance()
+                    val rgb = colorManager.hslToRgb(floatArrayOf(h, s, l))
+                    val color = Color.rgb(rgb[0], rgb[1], rgb[2])
+                    colorChangeListener?.invoke(color)
+                }
+            }
+            
+            hslHueSlider.addOnChangeListener(hslChangeListener)
+            hslSaturationSlider.addOnChangeListener(hslChangeListener)
+            hslLightnessSlider.addOnChangeListener(hslChangeListener)
+        }
+        
+        private fun updateInputs(color: Int) {
+            isUpdatingFromSliders = true
+            
+            // Update hex input
+            val hex = String.format("#%06X", 0xFFFFFF and color)
+            hexInput.setText(hex)
+            
+            // Update RGB sliders
+            rgbRedSlider.value = Color.red(color).toFloat()
+            rgbGreenSlider.value = Color.green(color).toFloat()
+            rgbBlueSlider.value = Color.blue(color).toFloat()
+            
+            // Update HSL sliders
+            val colorManager = ColorManager.getInstance()
+            val hsl = colorManager.rgbToHsl(intArrayOf(Color.red(color), Color.green(color), Color.blue(color)))
+            hslHueSlider.value = hsl[0]
+            hslSaturationSlider.value = hsl[1] * 100f
+            hslLightnessSlider.value = hsl[2] * 100f
+            
+            isUpdatingFromSliders = false
+        }
+        
+        override fun onColorUpdated(color: Int) {
+            updateInputs(color)
+        }
+    }
+    
+    // Color harmony tab
+    class ColorHarmonyTabFragment : ColorTabFragment() {
+        private lateinit var harmonyTypeSpinner: Spinner
+        private lateinit var harmonyPaletteView: ColorPaletteView
+        
+        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+            return inflater.inflate(R.layout.fragment_color_harmony_tab, container, false)
+        }
+        
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+            super.onViewCreated(view, savedInstanceState)
+            
+            harmonyTypeSpinner = view.findViewById(R.id.harmonyTypeSpinner)
+            harmonyPaletteView = view.findViewById(R.id.harmonyPaletteView)
+            
+            setupHarmonySpinner()
+            setupHarmonyPalette()
+            updateHarmony(currentColor)
+        }
+        
+        private fun setupHarmonySpinner() {
+            val harmonyTypes = arrayOf("Complementary", "Triadic", "Tetradic", "Analogous", "Split Complementary", "Monochromatic")
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, harmonyTypes)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            harmonyTypeSpinner.adapter = adapter
+            
+            harmonyTypeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    updateHarmony(currentColor)
+                }
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+        }
+        
+        private fun setupHarmonyPalette() {
+            harmonyPaletteView.setOnColorSelectedListener { color, _ ->
+                colorChangeListener?.invoke(color)
+            }
+        }
+        
+        private fun updateHarmony(baseColor: Int) {
+            if (!::harmonyTypeSpinner.isInitialized) return
+            
+            val colorManager = ColorManager.getInstance()
+            val harmonyColors = when (harmonyTypeSpinner.selectedItemPosition) {
+                0 -> listOf(baseColor, colorManager.getComplementaryColor(baseColor))
+                1 -> colorManager.getTriadicColors(baseColor)
+                2 -> colorManager.getTetradicColors(baseColor)
+                3 -> colorManager.getAnalogousColors(baseColor)
+                4 -> colorManager.getSplitComplementaryColors(baseColor)
+                5 -> colorManager.getMonochromaticColors(baseColor, 6)
+                else -> listOf(baseColor)
+            }
+            
+            val harmonyPalette = ColorPalette(
+                id = "harmony_temp",
+                name = "Color Harmony",
+                colors = harmonyColors,
+                type = com.example.drawinggame.ui.drawing.color.palette.PaletteType.GENERATED,
+                source = com.example.drawinggame.ui.drawing.color.palette.PaletteSource.HARMONY
+            )
+            
+            harmonyPaletteView.setPalette(harmonyPalette)
+        }
+        
+        override fun onColorUpdated(color: Int) {
+            updateHarmony(color)
+        }
+    }
+    
+    // Adapter for palette list
+    private class PaletteListAdapter(
+        private val onPaletteSelected: (ColorPalette) -> Unit
+    ) : RecyclerView.Adapter<PaletteListAdapter.PaletteViewHolder>() {
+        
+        private val palettes = mutableListOf<ColorPalette>()
+        
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PaletteViewHolder {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_color_palette, parent, false)
+            return PaletteViewHolder(view)
+        }
+        
+        override fun onBindViewHolder(holder: PaletteViewHolder, position: Int) {
+            holder.bind(palettes[position], onPaletteSelected)
+        }
+        
+        override fun getItemCount(): Int = palettes.size
+        
+        fun updatePalettes(newPalettes: List<ColorPalette>) {
+            palettes.clear()
+            palettes.addAll(newPalettes)
+            notifyDataSetChanged()
+        }
+        
+        class PaletteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            private val nameText: TextView = itemView.findViewById(R.id.paletteNameText)
+            private val previewView: ColorPaletteView = itemView.findViewById(R.id.palettePreviewView)
+            
+            fun bind(palette: ColorPalette, onSelected: (ColorPalette) -> Unit) {
+                nameText.text = palette.name
+                previewView.setPalette(palette)
+                previewView.setColumns(min(8, palette.colors.size))
+                
+                itemView.setOnClickListener {
+                    onSelected(palette)
+                }
+            }
+        }
+    }
+}

@@ -26,8 +26,36 @@
         app:navigationIcon="@drawable/ic_action_save"
         app:navigationContentDescription="Save drawing" />
 
+    <!-- Tool Selection Tabs -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/toolTabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginBottom="4dp"
+        app:tabMode="fixed"
+        app:tabGravity="fill">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Draw" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Layers" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select" />
+
+    </com.google.android.material.tabs.TabLayout>
+
     <!-- Drawing Tools Panel -->
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/drawingToolsCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -95,6 +123,24 @@
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
+
+    <!-- Layer Panel -->
+    <FrameLayout
+        android:id="@+id/layerPanelContainer"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginBottom="4dp"
+        android:visibility="gone" />
+
+    <!-- Selection Tools Panel -->
+    <com.example.drawinggame.ui.drawing.selection.ui.SelectionToolbar
+        android:id="@+id/selectionToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginBottom="4dp"
+        android:visibility="gone" />
 
     <!-- Brush Settings Panel -->
     <com.google.android.material.card.MaterialCardView
@@ -308,6 +354,13 @@
             android:textColor="?attr/colorOnSurfaceVariant"
             android:gravity="center"
             android:alpha="0.7" />
+
+        <!-- Selection Overlay -->
+        <com.example.drawinggame.ui.drawing.selection.ui.SelectionOverlayView
+            android:id="@+id/selectionOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
 
     </FrameLayout>
 

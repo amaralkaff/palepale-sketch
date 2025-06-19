@@ -67,6 +67,16 @@ object BitmapUtils {
     }
     
     /**
+     * Create a transparent bitmap with the specified dimensions
+     */
+    fun createTransparentBitmap(width: Int, height: Int): Bitmap {
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        canvas.drawColor(Color.TRANSPARENT)
+        return bitmap
+    }
+    
+    /**
      * Recycle a bitmap safely
      */
     fun recycleBitmap(bitmap: Bitmap?) {

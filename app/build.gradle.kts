@@ -66,14 +66,14 @@ dependencies {
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui)
     
-    // Add Room database
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    kapt(libs.androidx.room.compiler)
+    // Add Room database (temporarily commented out until we implement entities)
+    // implementation(libs.androidx.room.runtime)
+    // implementation(libs.androidx.room.ktx)
+    // kapt(libs.androidx.room.compiler)
     
     // Add image processing
     implementation(libs.glide)
-    kapt(libs.glide.compiler)
+    // kapt(libs.glide.compiler) // Temporarily commented out to avoid KAPT issues
     implementation(libs.photoview)
     
     // Keep existing test dependencies

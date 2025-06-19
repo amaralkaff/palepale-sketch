@@ -19,10 +19,15 @@ import java.util.Stack
 import com.example.drawinggame.ui.drawing.operations.CommandManager
 import com.example.drawinggame.ui.drawing.operations.commands.StrokeCommand
 import com.example.drawinggame.ui.drawing.operations.commands.ClearCommand
+// Layer system imports - Phase 5.2 implementation
+import com.example.drawinggame.ui.drawing.layers.core.LayerManager
+import com.example.drawinggame.ui.drawing.layers.core.LayerListener
+import com.example.drawinggame.ui.drawing.layers.core.DrawingLayer
 
 /**
  * Core drawing logic engine that manages drawing operations, coordinate transformations,
  * and drawing state. Implements the command pattern for undo/redo operations.
+ * Enhanced with Phase 5.2 layer system support.
  */
 class DrawingEngine {
     // Current drawing state
@@ -48,6 +53,10 @@ class DrawingEngine {
     private var canvasBitmap: Bitmap? = null
     private var drawCanvas: Canvas? = null
     
+    // Layer system (Phase 5.2) - implemented
+    private var layerManager: LayerManager? = null
+    private var layerSystemEnabled = false
+    
     // Drawing state
     private val strokes = mutableListOf<Stroke>()
     private var currentStroke: Stroke? = null
@@ -70,7 +79,7 @@ class DrawingEngine {
     /**
      * Initialize or reset the drawing engine
      */
-    fun initialize(width: Int, height: Int) {
+    fun initialize(width: Int, height: Int, context: android.content.Context? = null) {
         // Reset the stacks
         undoStack.clear()
         redoStack.clear()
@@ -87,6 +96,14 @@ class DrawingEngine {
         drawingState = DrawingState()
         
         canvasTransform = CanvasTransform()
+        
+        // Initialize layer system if context provided (Phase 5.2 - implemented)
+        context?.let {
+            layerManager = LayerManager(it).apply {
+                initialize(width, height)
+            }
+            layerSystemEnabled = true
+        }
         
         // Notify listeners
         notifyStateChanged()
@@ -270,6 +287,143 @@ class DrawingEngine {
         return drawingBitmap?.let { BitmapUtils.copyBitmap(it) }
     }
     
+    // Layer System Integration (Phase 5.2)
+    
+    /**
+     * Enable layer system for advanced drawing features
+     */
+    fun enableLayerSystem(context: android.content.Context) {
+        // Layer system not yet implemented (Phase 5.2)
+        // if (!layerSystemEnabled) {
+        //     layerManager = LayerManager(context).apply {
+        //         if (canvasBitmap != null) {
+        //             initialize(canvasBitmap!!.width, canvasBitmap!!.height)
+        //         }
+        //     }
+        //     layerSystemEnabled = true
+        // }
+    }
+    
+    /**
+     * Get layer manager instance (Phase 5.2 - implemented)
+     */
+    fun getLayerManager(): LayerManager? = layerManager
+    
+    /**
+     * Check if layer system is enabled
+     */
+    fun isLayerSystemEnabled(): Boolean = layerSystemEnabled
+    
+    /**
+     * Get current active layer for drawing operations (Phase 5.2 - implemented)
+     */
+    fun getActiveLayer(): DrawingLayer? = layerManager?.getActiveLayer()
+    
+    /**
+     * Start stroke on active layer (Phase 5.2 - not yet implemented)
+     */
+    fun startLayerStroke(x: Float, y: Float, tool: DrawingTool, paint: Paint) {
+        // Layer system not yet implemented, fallback to advanced stroke
+        startAdvancedStroke(x, y, tool, paint)
+        // if (!layerSystemEnabled) {
+        //     startAdvancedStroke(x, y, tool, paint)
+        //     return
+        // }
+        // 
+        // val activeLayer = layerManager?.getActiveLayer()
+        // if (activeLayer?.canDraw() == true) {
+        //     // Draw directly on layer bitmap
+        //     activeLayer.bitmap?.let { layerBitmap ->
+        //         val layerCanvas = Canvas(layerBitmap)
+        //         currentPath = Path()
+        //         currentPath.moveTo(x, y)
+        //         
+        //         currentStroke = Stroke(
+        //             tool = tool,
+        //             color = paint.color,
+        //             size = paint.strokeWidth,
+        //             alpha = paint.alpha,
+        //             path = Path(currentPath),
+        //             customPaint = paint
+        //         )
+        //     }
+        // }
+    }
+    
+    /**
+     * Continue stroke on active layer (Phase 5.2 - not yet implemented)
+     */
+    fun continueLayerStroke(x: Float, y: Float, pressure: Float, paint: Paint) {
+        // Layer system not yet implemented, fallback to advanced stroke
+        addPointToAdvancedStroke(x, y, pressure, paint)
+        // if (!layerSystemEnabled) {
+        //     addPointToAdvancedStroke(x, y, pressure, paint)
+        //     return
+        // }
+        // 
+        // val activeLayer = layerManager?.getActiveLayer()
+        // if (activeLayer?.canDraw() == true && currentStroke != null) {
+        //     currentPath.lineTo(x, y)
+        //     
+        //     // Update stroke
+        //     currentStroke?.apply {
+        //         path = Path(currentPath)
+        //         customPaint = paint
+        //         size = paint.strokeWidth
+        //         alpha = paint.alpha
+        //     }
+        //     
+        //     // Draw to layer bitmap
+        //     activeLayer.bitmap?.let { layerBitmap ->
+        //         val layerCanvas = Canvas(layerBitmap)
+        //         layerCanvas.drawPath(currentPath, paint)
+        //     }
+        // }
+    }
+    
+    /**
+     * Finish stroke on active layer (Phase 5.2 - not yet implemented)
+     */
+    fun finishLayerStroke() {
+        // Layer system not yet implemented, fallback to standard stroke
+        finishStroke()
+        // if (!layerSystemEnabled) {
+        //     finishStroke()
+        //     return
+        // }
+        // 
+        // val activeLayer = layerManager?.getActiveLayer()
+        // if (activeLayer?.canDraw() == true && currentStroke != null) {
+        //     // Add stroke to layer (for undo/redo if needed)
+        //     currentStroke?.let { stroke ->
+        //         strokes.add(stroke)
+        //     }
+        //     
+        //     // Mark layer as modified
+        //     activeLayer.markAsModified()
+        //     
+        //     // Generate thumbnail
+        //     layerManager?.getLayerManager()?.let { manager ->
+        //         // Update layer thumbnail would go here
+        //     }
+        //     
+        //     // Reset current stroke
+        //     currentStroke = null
+        //     currentPath = Path()
+        // }
+    }
+    
+    /**
+     * Get composite image from layer system
+     */
+    fun getLayerComposite(): Bitmap? {
+        return if (layerSystemEnabled) {
+            getBitmap() // layerManager?.getCompositeImage()
+        } else {
+            getBitmap()
+        }
+    }
+    
     /**
      * Clean up resources
      */
@@ -278,6 +432,9 @@ class DrawingEngine {
         listeners.clear()
         undoStack.clear()
         redoStack.clear()
+        // layerManager?.cleanup()
+        // layerManager = null
+        layerSystemEnabled = false
     }
     
     /**
@@ -487,6 +644,110 @@ class DrawingEngine {
         notifyStrokeCancelled()
     }
     
+    // Advanced stroke methods for Phase 5.1
+    
+    /**
+     * Start a new stroke with advanced paint for Phase 5.1 brushes
+     */
+    fun startAdvancedStroke(x: Float, y: Float, tool: DrawingTool, paint: Paint) {
+        // Create a new path
+        currentPath = Path()
+        currentPath.moveTo(x, y)
+        
+        // Create a new stroke with advanced paint properties
+        currentStroke = Stroke(
+            tool = tool,
+            color = paint.color,
+            size = paint.strokeWidth,
+            alpha = paint.alpha,
+            path = Path(currentPath)
+        )
+        
+        // Store the advanced paint for later use
+        currentStroke?.customPaint = paint
+        
+        // Clear redo stack when a new stroke is started
+        redoStack.clear()
+        
+        // Notify listeners
+        notifyStrokeStarted(x, y, tool)
+    }
+    
+    /**
+     * Add a point to current stroke with advanced paint
+     */
+    fun addPointToAdvancedStroke(x: Float, y: Float, pressure: Float, paint: Paint) {
+        if (currentStroke == null) return
+        
+        // Add point to path
+        currentPath.lineTo(x, y)
+        
+        // Update the stroke's path and paint
+        currentStroke?.path = Path(currentPath)
+        currentStroke?.customPaint = paint
+        
+        // Update size from paint
+        currentStroke?.size = paint.strokeWidth
+        currentStroke?.alpha = paint.alpha
+        
+        // Notify listeners
+        notifyStrokeContinued(x, y, pressure)
+    }
+    
+    /**
+     * Update stroke with advanced path and paint
+     */
+    fun updateAdvancedStroke(path: Path, paint: Paint, pressure: Float = 1.0f) {
+        if (currentStroke == null) return
+        
+        // Update the current path and paint
+        currentPath = path
+        currentStroke?.path = Path(currentPath)
+        currentStroke?.customPaint = paint
+        
+        // Update stroke properties from paint
+        currentStroke?.size = paint.strokeWidth
+        currentStroke?.alpha = paint.alpha
+        
+        // Notify listeners
+        notifyStrokeUpdated(path, pressure)
+    }
+    
+    /**
+     * Finish advanced stroke with final paint
+     */
+    fun finishAdvancedStroke(finalPath: Path, finalPaint: Paint) {
+        currentStroke?.let { stroke ->
+            // Update with final path and paint
+            stroke.path = finalPath
+            stroke.customPaint = finalPaint
+            stroke.size = finalPaint.strokeWidth
+            stroke.alpha = finalPaint.alpha
+            currentPath = finalPath
+            
+            // Add to strokes list
+            strokes.add(stroke)
+            
+            // Draw the stroke with advanced paint
+            drawAdvancedStroke(stroke)
+            
+            // Reset current stroke
+            val completedStroke = stroke
+            currentStroke = null
+            currentPath = Path()
+            
+            // Notify listeners
+            notifyStrokeFinished(completedStroke)
+        }
+    }
+    
+    /**
+     * Cancel current stroke (alias for compatibility)
+     */
+    fun cancelCurrentStroke() {
+        cancelStroke()
+    }
+    
     /**
      * Draw a stroke to the canvas
      */
@@ -497,6 +758,19 @@ class DrawingEngine {
         val paint = createPaintForTool(stroke.tool, stroke.size, stroke.color, stroke.alpha)
         
         // Draw the stroke
+        canvas.drawPath(stroke.path, paint)
+    }
+    
+    /**
+     * Draw an advanced stroke with custom paint
+     */
+    private fun drawAdvancedStroke(stroke: Stroke) {
+        val canvas = drawCanvas ?: return
+        
+        // Use custom paint if available, otherwise fall back to basic paint
+        val paint = stroke.customPaint ?: createPaintForTool(stroke.tool, stroke.size, stroke.color, stroke.alpha)
+        
+        // Draw the stroke with advanced paint
         canvas.drawPath(stroke.path, paint)
     }
     

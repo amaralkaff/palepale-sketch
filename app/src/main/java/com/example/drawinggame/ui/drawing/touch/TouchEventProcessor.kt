@@ -8,6 +8,8 @@ import com.example.drawinggame.ui.drawing.models.DrawingTool
 import com.example.drawinggame.ui.drawing.touch.gestures.DrawingGestureDetector
 import com.example.drawinggame.ui.drawing.touch.models.GestureEvent
 import com.example.drawinggame.ui.drawing.touch.models.TouchState
+import com.example.drawinggame.ui.drawing.advanced.brushes.AdvancedBrushManager
+import com.example.drawinggame.ui.drawing.advanced.brushes.AdvancedBrushType
 
 /**
  * Central coordinator for all touch event processing.
@@ -24,6 +26,9 @@ class TouchEventProcessor(
     // Gesture handlers
     private val drawingGestureHandler = DrawingGestureHandler(drawingEngine)
     private val navigationGestureHandler = NavigationGestureHandler()
+    
+    // Advanced brush support
+    private val advancedBrushManager = AdvancedBrushManager.getInstance(context)
     
     // Gesture detector
     private val gestureDetector: DrawingGestureDetector
@@ -116,7 +121,24 @@ class TouchEventProcessor(
     fun setDrawingTool(tool: DrawingTool) {
         touchState.updateCurrentTool(tool)
         gestureDetector.setDrawingTool(tool)
+        // Switch to basic mode when using basic tools
+        advancedBrushManager.setBasicMode()
     }
+    
+    /**
+     * Set advanced brush tool
+     */
+    fun setAdvancedBrushTool(tool: AdvancedBrushType) {
+        advancedBrushManager.setAdvancedTool(tool)
+        // Advanced tools work with drawing gestures, so update state
+        touchState.updateCurrentTool(DrawingTool.BRUSH) // Use BRUSH as base tool for advanced brushes
+        gestureDetector.setDrawingTool(DrawingTool.BRUSH)
+    }
+    
+    /**
+     * Get advanced brush manager for configuration
+     */
+    fun getAdvancedBrushManager(): AdvancedBrushManager = advancedBrushManager
     
     /**
      * Update canvas transform in all components

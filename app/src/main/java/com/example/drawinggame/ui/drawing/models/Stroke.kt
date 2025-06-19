@@ -1,6 +1,7 @@
 package com.example.drawinggame.ui.drawing.models
 
 import android.graphics.Path
+import android.graphics.Paint
 
 /**
  * Represents a single drawing stroke on the canvas.
@@ -13,7 +14,7 @@ data class Stroke(
     // Stroke visual properties
     val color: Int,
     var size: Float,
-    val alpha: Int,
+    var alpha: Int,
     
     // The path of the stroke
     var path: Path,
@@ -22,7 +23,10 @@ data class Stroke(
     val points: MutableList<StrokePoint> = mutableListOf(),
     
     // Timestamp when the stroke was created
-    val timestamp: Long = System.currentTimeMillis()
+    val timestamp: Long = System.currentTimeMillis(),
+    
+    // Advanced brush paint for Phase 5.1 (nullable for backward compatibility)
+    var customPaint: Paint? = null
 ) {
     /**
      * Represents a single point in a stroke with pressure information

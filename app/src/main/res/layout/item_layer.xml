@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center_vertical">
+
+    <!-- Layer Thumbnail -->
+    <ImageView
+        android:id="@+id/layerThumbnail"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/card_background"
+        android:scaleType="centerCrop"
+        android:contentDescription="Layer thumbnail"
+        android:layout_marginEnd="12dp" />
+
+    <!-- Layer Info -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!-- Layer Name -->
+        <TextView
+            android:id="@+id/layerName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Layer 1"
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+            android:textColor="@color/on_surface"
+            android:maxLines="1"
+            android:ellipsize="end" />
+
+        <!-- Layer Type and Blend Mode -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="2dp">
+
+            <TextView
+                android:id="@+id/layerType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Drawing"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                android:textColor="@color/on_surface_variant"
+                android:background="@drawable/chip_background"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="2dp"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/layerBlendMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Normal"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                android:textColor="@color/on_surface_variant" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Layer Controls -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <!-- Lock Status -->
+        <ImageView
+            android:id="@+id/layerLockIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_lock"
+            android:visibility="gone"
+            android:contentDescription="Layer locked"
+            android:layout_marginEnd="8dp" />
+
+        <!-- Visibility Toggle -->
+        <ImageButton
+            android:id="@+id/layerVisibilityToggle"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_visibility"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Toggle layer visibility"
+            android:layout_marginEnd="4dp" />
+
+        <!-- Layer Options Menu -->
+        <ImageButton
+            android:id="@+id/layerOptionsMenu"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_more_vert"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Layer options" />
+
+    </LinearLayout>
+
+    <!-- Active Layer Indicator -->
+    <View
+        android:id="@+id/activeLayerIndicator"
+        android:layout_width="4dp"
+        android:layout_height="match_parent"
+        android:background="@color/primary"
+        android:visibility="gone"
+        android:layout_marginStart="8dp" />
+
+</LinearLayout>
